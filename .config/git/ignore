@@ -1,0 +1,35 @@
+# sublime project files
+*.sublime-project
+*.sublime-workspace
+
+# vs code
+.vscode
+.vs
+
+# zed
+.zed
+
+# dotenv
+.env
+
+# local mise config
+mise.local.toml
+mise.local.lock
+
+# local docker compose overrides
+docker-compose.override.yaml
+docker-compose.override.yml
+compose.override.yaml
+compose.override.yml
+
+# direnv
+.envrc
+
+# kde directory settings
+.directory
+
+# aider config and temporary files
+.aider.*
+
+# docker sandboxes
+.sbx

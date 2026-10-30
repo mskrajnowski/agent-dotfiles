@@ -1,0 +1,7 @@
+[user]
+name = "Marek Skrajnowski"
+email = "mskrajnowski@users.noreply.github.com"
+
+[ui]
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
+merge-editor = "mergiraf"

@@ -1,0 +1,16 @@
+[tool_alias]
+mergiraf = "forgejo:mergiraf/mergiraf"
+
+[tools]
+claude = "latest"
+difftastic = "latest"
+fd = "latest"
+jj = "latest"
+jq = "latest"
+mergiraf = "latest"
+pi = "latest"
+ripgrep = "latest"
+starship = "latest"
+usage = "latest"
+uv = "latest"
+yq = "latest"

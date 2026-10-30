@@ -1,2 +1,3 @@
-# .agents
-Base instructions and skills for agents
+# agent-dotfiles
+
+Dotfiles used by my coding agents

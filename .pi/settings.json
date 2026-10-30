@@ -1,0 +1,38 @@
+{
+  "lastChangelogVersion": "1.4.0",
+  "defaultProvider": "openrouter",
+  "defaultModel": "z-ai/glm-5.3-flash",
+  "enabledModels": [
+    "openrouter/deepseek/deepseek-v4.1-flash",
+    "openrouter/z-ai/glm-5.3",
+    "openrouter/z-ai/glm-5.3-flash"
+  ],
+  "defaultThinkingLevel": "low",
+  "packages": ["npm:pi-web-access", "npm:context-mode", "npm:pi-subagents"],
+  "subagents": {
+    "defaultModel": "z-ai/glm-5.3-flash",
+    "defaultThinking": "low",
+    "agentOverrides": {
+      "scout": {
+        "model": "openrouter/z-ai/glm-5.3-flash",
+        "thinking": "low"
+      },
+      "researcher": {
+        "model": "openrouter/z-ai/glm-5.3-flash",
+        "thinking": "low"
+      },
+      "worker": {
+        "model": "openrouter/z-ai/glm-5.3-flash",
+        "thinking": "high"
+      },
+      "reviewer": {
+        "model": "openrouter/z-ai/glm-5.3-flash",
+        "thinking": "high"
+      },
+      "oracle": {
+        "model": "openrouter/z-ai/glm-5.3",
+        "thinking": "high"
+      }
+    }
+  }
+}
