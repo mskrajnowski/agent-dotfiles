@@ -36,7 +36,7 @@ Pick the prefix matching the change type; the slug summarizes the goal. No issue
 
 ## 4. Commit messages
 
-Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): `type(scope): summary`.
+Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): summary`. The full spec is in that local reference — read it there instead of fetching it from the web.
 
 - Brief and specific. `fix(auth): use refresh token before expiry`, not `update code`.
 - Body only when it adds real context (why, not what); no essays.
@@ -50,6 +50,10 @@ Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): `typ
 - Agents do not merge PRs or resolve review comments — the developer does. When asked to address review feedback, follow the `forge-pr` feedback loop: fix → commit locally → reply to each addressed comment with the short commit SHA → push (`--force-with-lease`). Reply before pushing, per `forge-pr`.
 
 ## 6. Safety
+
+Breaking changes follow the spec: `!` after type/scope (`feat(api)!:`) or a `BREAKING CHANGE:` footer.
+
+## 7. Safety
 
 - Ask before irreversible actions: history rewrites, force pushes (outside the `--force-with-lease` review loop), changing credentials, deleting data.
 - Never commit secrets. Redact logs and keep real user data out of tests and fixtures.
