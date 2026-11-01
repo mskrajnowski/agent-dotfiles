@@ -2,6 +2,7 @@
 
 Real-world scenarios for verifying this skill. Run each after edits to the skill and record pass/fail.
 
+Live scenarios run against a throwaway test repo — see the `forge` skill's testing convention (create it, test, delete it). The repo name in the examples below (`mskrajnowski/forge-skills-sandbox`) is a leftover from earlier testing sessions; use the current test repo instead.
 
 ## Scenario 1: create an issue (live)
 
