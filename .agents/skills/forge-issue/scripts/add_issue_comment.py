@@ -31,10 +31,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Add a comment to an issue.")
     parser.add_argument("repo", metavar="owner/repo")
     parser.add_argument("index", type=int)
-    parser.add_argument("text", metavar="text|-", help="comment text; '-' reads it from stdin")
     args = parser.parse_args()
-    if args.text == "-":
-        args.text = sys.stdin.read().rstrip("\n")
+    args.text = sys.stdin.read().rstrip("\n")
     if not args.text:
         sys.exit("ERROR: empty comment text")
 

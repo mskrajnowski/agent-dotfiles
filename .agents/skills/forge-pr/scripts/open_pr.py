@@ -34,16 +34,8 @@ def main() -> None:
     parser.add_argument("head")
     parser.add_argument("base")
     parser.add_argument("title")
-    parser.add_argument(
-        "body",
-        nargs="?",
-        default="",
-        metavar="body|-",
-        help="PR description; '-' reads it from stdin",
-    )
     args = parser.parse_args()
-    if args.body == "-":
-        args.body = sys.stdin.read().rstrip("\n")
+    args.body = sys.stdin.read().rstrip("\n")
 
     session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
     resp = session.post(
