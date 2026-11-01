@@ -36,6 +36,7 @@ Hard-won quirks of the current API — trust these over assumptions when writing
 - **Swagger can overstate the API:** `GET /pulls/{index}/requested_reviewers` is documented but returns 404; the `POST` variant works and returns `201` with an empty array.
 - **`GET /pulls/{index}` has no commit counts** (`commits: null`) — use `changed_files`, `additions`, `deletions` for change stats.
 - **Timeline events** (`GET /issues/{index}/timeline?limit=50`) include `comment`, `close`, `pull_push`, `review`, `review_request`, and `change_title` events.
+- **Quoting a comment you reply to outside a thread** (PR-level/issue comments, or free-standing review comments): forgejo's own reply format is `@<author> wrote in <permalink>:`, then a blank line, then the original as a blockquote, then a blank line, then the reply — the header is NOT part of the blockquote, and the blank lines are required or the reply text renders as part of the quote. Threaded replies to diff comments get the original shown above in the UI, so don't quote those.
 
 ## Which skill to use
 

@@ -6,6 +6,9 @@
 #   original above the reply, so don't quote it.
 # - Free-standing comments (no file anchor): the reply is posted as a
 #   general PR comment quoting the original, since those get no thread UI.
+#   The quote uses forgejo's own reply format:
+#   @<author> wrote in <permalink>: / blank line / blockquoted body / blank
+#   line / reply text — the header must NOT be inside the blockquote.
 #
 # Reply BEFORE pushing commits — pushing changes the diff, and a reply
 # posted against a changed diff can land as a separate thread.
@@ -63,11 +66,14 @@ if [[ -n $path ]]; then
     exit 1
   fi
 else
-  # Free-standing reply: quote the original as a PR comment.
+  # Free-standing reply: quote the original as a PR comment, in forgejo's
+  # native reply format (header outside the blockquote, blank lines between
+  # header / quote / reply — see forge/references/API.md).
   author=$(jq -r '.user.login' <<<"$orig")
   body=$(jq -r '.body' <<<"$orig")
-  quoted=$(jq -rn --arg a "$author" --arg c "$cid" --arg b "$body" --arg r "$text" \
-    '"> In reply to @**" + $a + "** (comment " + $c + "):\n" +
+  url=http://forge.local/${repo}/pulls/${index}
+  quoted=$(jq -rn --arg a "$author" --arg u "$url" --arg b "$body" --arg r "$text" \
+    '"@" + $a + " wrote in " + $u + ":\n\n" +
     ($b | split("\n") | map("> " + .) | join("\n")) +
     "\n\n" + $r')
   code=$(curl --netrc -s -o "$tmp2" -w "%{http_code}" \

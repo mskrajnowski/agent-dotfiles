@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Fetch reviews and review comments for a PR, flattened for agent use.
 # Usage: review_pr_comments.sh <owner>/<repo> <index>
-# Prints: review states, then each comment: id, resolved status, file:line,
-# author, and body. Body is truncated to 3 lines.
+# Prints: review states, then each inline review comment: id, resolved status,
+# file:line, author, and full body — followed by a PR-level comments section
+# (issue-style comments on the PR index; PRs are issues in Forgejo).
 set -euo pipefail
 
 repo=${1:?usage: review_pr_comments.sh <owner>/<repo> <index>}
@@ -28,6 +29,17 @@ for review_id in $(jq -r '.[].id' "$tmp"); do
       (.diff_hunk | split("\n") | "  " + join("\n  ")),
       "  ```"
     else empty end),
-    (.body | split("\n")[:3] | "  " + join("\n  ")),
+    (.body | split("\n") | "  " + join("\n  ")),
     "---"' "$tmp2"
 done
+
+# PR-level (issue-style) comments — PRs are issues, so these live on the
+# issue-comments endpoint, not under /reviews.
+code=$(curl --netrc -s -o "$tmp2" -w "%{http_code}" "http://forge.local/api/v1/repos/${repo}/issues/${index}/comments")
+[[ $code == 200 ]] || { echo "WARN: HTTP $code fetching PR-level comments" >&2; exit 0; }
+jq -r 'if length > 0 then
+  "PR-LEVEL COMMENTS (no diff anchor):",
+  (.[] | "COMMENT \(.id) by \(.user.login) at \(.created_at)",
+    (.body | split("\n") | "  " + join("\n  ")),
+    "---")
+else empty end' "$tmp2"

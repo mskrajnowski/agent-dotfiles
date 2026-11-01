@@ -36,7 +36,7 @@ Live scenarios run against a throwaway test repo you create first (see the `forg
 **Expected:**
 - Each script prints a confirmation id (comment id / review id) — no raw JSON, no `null` fields.
 - Reply to a **threaded** comment: body is plain text — no quote, no "In reply to" header; `review_pr_comments.sh` shows it at the same path:line as the original (same thread).
-- Reply to a **free-standing** comment (no path): posted as a PR comment quoting the original, with a blank line separating the quote from the reply.
+- Reply to a **free-standing** comment (no path): posted as a PR comment quoting the original in forgejo's reply format — `@<author> wrote in <PR permalink>:`, blank line, blockquoted original, blank line, reply text.
 - Replying after the branch has moved prints a `WARN` about possible thread splitting.
 
 ## Scenario 3c: diff, status, review request, update (live)

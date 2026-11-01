@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Fetch comments for an issue.
 # Usage: review_issue_comments.sh <owner>/<repo> <index>
-# Prints: id, author, and body (truncated to 3 lines) per comment.
+# Prints: id, author, and full body per comment.
 set -euo pipefail
 
 repo=${1:?usage: issue_comments.sh <owner>/<repo> <index>}
@@ -16,5 +16,5 @@ code=$(curl --netrc -s -o "$tmp" -w "%{http_code}" "$api")
 
 jq -r '.[] |
   "COMMENT \(.id) by \(.user.login) at \(.created_at)",
-  (.body | split("\n")[:3] | "  " + join("\n  ")),
+  (.body | split("\n") | "  " + join("\n  ")),
   "---"' "$tmp"
