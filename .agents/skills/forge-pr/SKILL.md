@@ -88,8 +88,10 @@ Requests (or re-requests) review. Re-request after force-pushing fixes.
 ### Update a PR
 
 ```bash
-scripts/update_pr.sh <owner>/<repo> <index> [--title <text>] [--body <text|-|->] [--state open|closed]
+scripts/update_pr.sh <owner>/<repo> <index> [--title <text>] [--body <text|-|->]
 ```
+
+Title and body only — state changes (close/reopen) are the user's action.
 
 `--body -` reads the body from stdin.
 
