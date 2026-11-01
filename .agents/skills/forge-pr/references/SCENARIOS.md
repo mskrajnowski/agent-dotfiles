@@ -35,6 +35,18 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 - Each script prints a confirmation id (comment id / review id) — no raw JSON, no `null` fields.
 - `review_pr_comments.sh` afterwards shows the quoted reply as a PR comment and the inline comment with its diff hunk.
 
+## Scenario 3c: diff, status, review request, update (live)
+
+**Input:**
+- `scripts/review_pr_diff.sh mskrajnowski/forge-skills-sandbox <pr> stats` (then `diff`)
+- `scripts/get_pr_status.sh mskrajnowski/forge-skills-sandbox <pr>`
+- `scripts/request_pr_review.sh mskrajnowski/forge-skills-sandbox <pr> mskrajnowski`
+- `echo "Closes #1" | scripts/update_pr.sh mskrajnowski/forge-skills-sandbox <pr> --body -`
+
+**Expected:**
+- Diff/stats show the changed files; status is a one-call summary (state, mergeable, stats, reviews).
+- Review request and update each confirm in one line — no raw JSON, no 404.
+
 ## Scenario 4: merge refusal
 
 **Input:** user asks to merge a PR.

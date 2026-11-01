@@ -1,6 +1,6 @@
 ---
 name: forge-pr
-description: Work with pull requests on the user's forge — open, list, fetch review comments, resolve review feedback. Use when the user asks to open a PR, review PR comments, or address review feedback. Agents do not merge PRs; merging is the user's action.
+description: Work with pull requests on the user's forge — open, list, review diffs and comments, reply to feedback, request reviews. Use when the user asks to open a PR, review PR comments, or address review feedback. Agents do not merge PRs or resolve review comments; merging and resolving are the user's actions.
 ---
 
 # Working with pull requests
@@ -32,7 +32,7 @@ Prints `#index [state] title (head→base)` per PR.
 scripts/review_pr_comments.sh <owner>/<repo> <index>
 ```
 
-Prints each review's state and every comment (`id`, `path`, `line`, `author`, `body`), plus which comments are already resolved. This is the core loop for addressing feedback: read comments → fix code → commit → force-push (`--force-with-lease`) → resolve the comment when done.
+Prints each review's state and every comment (`id`, `path`, `line`, `author`, `body`), plus which comments are already resolved. This is the core loop for addressing feedback: read comments → fix code → commit → force-push (`--force-with-lease`) → reply to each addressed comment with the short commit SHA.
 
 ### Add a general PR comment
 
@@ -58,19 +58,51 @@ scripts/reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-i
 
 Posts a review comment in the same review at the same path:line, which the forge UI groups into the original thread (the API has no explicit `in_reply_to`; thread membership is by review + path + position). After addressing feedback, reply with a short commit SHA — the forge renders bare SHAs as clickable commit links. The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`).
 
+### Review the PR diff
+
+```bash
+scripts/review_pr_diff.sh <owner>/<repo> <index> [diff|stats]
+```
+
+- `diff` (default) — full unified diff of the PR. Write large diffs to a file and summarize.
+- `stats` — one line per changed file with add/delete counts.
+
+Use before opening a PR to double-check its contents, and when reviewing what a PR actually changes.
+
+### Get PR status
+
+```bash
+scripts/get_pr_status.sh <owner>/<repo> <index>
+```
+
+One-call summary: state, mergeability, head→base, change stats, review comment count, requested reviewers, and review states. Use to check a PR's situation without dumping JSON.
+
+### Request review
+
+```bash
+scripts/request_pr_review.sh <owner>/<repo> <index> <username>...
+```
+
+Requests (or re-requests) review. Re-request after force-pushing fixes.
+
+### Update a PR
+
+```bash
+scripts/update_pr.sh <owner>/<repo> <index> [--title <text>] [--body <text|-|->] [--state open|closed]
+```
+
+`--body -` reads the body from stdin.
+
 ### Merging
 
 Agents never merge PRs. After the PR is opened and review feedback is addressed, hand the decision to the user. If asked to merge, explain that merging is the user's action.
 
-### Update a PR
-
-Use the API directly for title/body changes:
-`PATCH /repos/{owner}/{repo}/pulls/{index}` with `{"title":..., "body":...}` (body file + jq, no raw dump).
-
 ## Conventions
 
 - PR titles use Conventional Commits (per the repo's commit rules).
-- After amending and force-pushing, tell the user which review comments were addressed and which remain open.
+- Reference the issues a PR resolves in its description (`Closes #N`, `Fixes #N`) — forgejo auto-closes them when the user merges.
+- After amending and force-pushing, reply to each addressed review comment with the short commit SHA, and re-request review.
+- Agents never merge PRs, close/reopen PRs, resolve review comments, or manage labels — those are the user's actions on the forge UI. Reply with the commit that addressed the feedback instead; the user resolves it.
 
 ## Harness notes
 

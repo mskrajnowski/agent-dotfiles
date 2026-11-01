@@ -6,7 +6,7 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 **Input:** `scripts/open_issue.sh mskrajnowski/forge-skills-sandbox "test: skill demo" "Created by forge-issue regression test."`
 
-**Expected:** output `Issue #<n> opened: http://forge.local/...`; issue visible on the forge; close/clean up afterwards.
+**Expected:** output `Issue #<n> opened: http://forge.local/...`; issue visible on the forge.
 
 ## Scenario 2: list issues
 
@@ -16,9 +16,15 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 3: fetch + add comments (live)
 
-**Input:** comment on the issue from Scenario 1 (`comment_issue.sh ... -` with stdin text), then `issue_comments.sh`.
+**Input:** comment on the issue from Scenario 1 (`add_issue_comment.sh ... -` with stdin text), then `review_issue_comments.sh`.
 
-**Expected:** new comment id printed; `issue_comments.sh` shows the comment with author and truncated body.
+**Expected:** new comment id printed; `review_issue_comments.sh` shows the comment with author and truncated body.
+
+## Scenario 3b: issue timeline (live)
+
+**Input:** `scripts/review_issue_timeline.sh mskrajnowski/forge-skills-sandbox <issue>`
+
+**Expected:** chronological event lines (comments, state changes), not just comments — no raw JSON.
 
 ## Scenario 4: PR routing boundary
 

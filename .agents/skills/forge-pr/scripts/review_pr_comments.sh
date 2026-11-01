@@ -5,7 +5,7 @@
 # author, and body. Body is truncated to 3 lines.
 set -euo pipefail
 
-repo=${1:?usage: pr_reviews.sh <owner>/<repo> <pr-index>}
+repo=${1:?usage: review_pr_comments.sh <owner>/<repo> <pr-index>}
 index=${2:?missing PR index}
 
 base=http://forge.local/api/v1/repos/${repo}/pulls/${index}
