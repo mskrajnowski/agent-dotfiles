@@ -1,6 +1,6 @@
 ---
 name: writing-skills
-description: Author new Agent Skills — user skills for the dotfiles repo and project skills for any repository. Use when the user asks to create or add a skill, write SKILL.md, or extend the agent's capabilities with a new skill.
+description: Author new Agent Skills in a repository's .agents/skills directory. Use when the user asks to create or add a skill, write SKILL.md, or extend the agent's capabilities with a new skill.
 ---
 
 # Writing skills
@@ -19,18 +19,13 @@ Do **not** write a skill for one-off tasks, or for behavior that belongs in `AGE
 ## Workflow
 
 1. **Design first.** Draft the directory tree and describe what `SKILL.md` will contain. Get user feedback before building.
-2. **Decide the location.** Skills are Agent Skills directories placed in a skills-discovery location:
-   - **Project skills** — for repository-specific tasks: `CODE/.agents/skills/<name>/`. Committed in the project repo and shared with its collaborators.
-   - **User skills** — for cross-project tasks: the user's dotfiles repo at `.agents/skills/<name>/`, installed into `$HOME` via GNU stow.
-   If the user did not specify, ask which one fits; cross-project workflows go in the dotfiles repo.
+2. **Location.** Skills live in the current project's repo at `.agents/skills/<name>/`, committed and shared with the project's collaborators. If the skill is meant to be user/global (available across projects), add it to the user's dotfiles repo (`agent-dotfiles`) instead and follow that repo's instructions.
 3. **Write `SKILL.md`.** Follow the spec (see SPEC.md). Keep it under 500 lines. The `description` must state *what it does* and *when to use it*, with concrete trigger keywords — this is the only routing signal.
 4. **Progressive disclosure.** Move detail out of `SKILL.md` into `references/` (loaded on demand) or `scripts/`. Keep references one level deep from `SKILL.md`.
 5. **Write regression scenarios.** Record the real-world test scenarios for the skill (inputs, steps, expected results) in `references/SCENARIOS.md`, so future edits can be verified against the same use cases.
 6. **Validate.** Run `agentskills validate <skill-dir>` (see compatibility requirements in the testing-skills skill). Fix all errors.
 7. **Test.** Use the `testing-skills` skill to verify the skill routes correctly and its instructions work end to end.
-8. **Commit.**
-   - *Project skill:* commit to the project repo per its conventions (typically a topic branch and PR).
-   - *User skill:* commit in the dotfiles repo per its `AGENTS.md` commit rules (topic branch, conventional commits, atomic commits), stow it into `$HOME` by re-running the dotfiles `install.sh`, then open a pull request on the user's forge (`forge.local`, Forgejo — API at `http://forge.local/api/v1`, auth via `~/.netrc`).
+8. **Commit and PR.** Follow the project repo's conventions — typically a topic branch, conventional commits, atomic commits, then a pull request on the project's forge.
 
 ## Harness notes
 
