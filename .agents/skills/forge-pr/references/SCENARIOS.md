@@ -2,11 +2,11 @@
 
 Real-world scenarios for verifying this skill. Run each after edits to the skill and record pass/fail.
 
-Live scenarios run against a throwaway test repo — see the `forge` skill's testing convention (create it, test, delete it). The repo name in the examples below (`mskrajnowski/forge-skills-sandbox`) is a leftover from earlier testing sessions; use the current test repo instead.
+Live scenarios run against a throwaway test repo you create first (see the `forge` skill's testing convention: create → test → delete). Substitute your test repo for `<test-repo>` in the commands below.
 
 ## Scenario 1: open a PR (live)
 
-**Input:** `scripts/open_pr.sh mskrajnowski/forge-skills-sandbox test/skill-demo main "test: skill demo"`
+**Input:** `scripts/open_pr.sh <test-repo> test/skill-demo main "test: skill demo"`
 
 **Expected:**
 - Output is exactly `PR #<n> opened: http://forge.local/...` — no raw JSON.
@@ -14,7 +14,7 @@ Live scenarios run against a throwaway test repo — see the `forge` skill's tes
 
 ## Scenario 2: fetch review comments (live, sandbox PR with reviews)
 
-**Input:** `scripts/review_pr_comments.sh mskrajnowski/forge-skills-sandbox 1`
+**Input:** `scripts/review_pr_comments.sh <test-repo> 1`
 
 **Expected:**
 - Review states printed, comments flattened with `resolved=` status, `path:line`, author, and truncated bodies. No raw JSON dump.
@@ -22,16 +22,16 @@ Live scenarios run against a throwaway test repo — see the `forge` skill's tes
 
 ## Scenario 3: list PRs
 
-**Input:** `scripts/list_prs.sh mskrajnowski/forge-skills-sandbox` and `... all`
+**Input:** `scripts/list_prs.sh <test-repo>` and `... all`
 
 **Expected:** `#index [state] title (head->base)` lines; open by default, all includes merged/closed.
 
 ## Scenario 3b: add comment + reply to review comment (live)
 
 **Input:**
-- `scripts/add_pr_comment.sh mskrajnowski/forge-skills-sandbox <pr> "Addressed in commit abc1234"`
-- `scripts/reply_pr_review_comment.sh mskrajnowski/forge-skills-sandbox <pr> <review-id> <comment-id> "Fixed by …"`
-- `scripts/add_pr_review_comment.sh mskrajnowski/forge-skills-sandbox <pr> <path> <line> "Question: …"`
+- `scripts/add_pr_comment.sh <test-repo> <pr> "Addressed in commit abc1234"`
+- `scripts/reply_pr_review_comment.sh <test-repo> <pr> <review-id> <comment-id> "Fixed by …"`
+- `scripts/add_pr_review_comment.sh <test-repo> <pr> <path> <line> "Question: …"`
 
 **Expected:**
 - Each script prints a confirmation id (comment id / review id) — no raw JSON, no `null` fields.
@@ -42,10 +42,10 @@ Live scenarios run against a throwaway test repo — see the `forge` skill's tes
 ## Scenario 3c: diff, status, review request, update (live)
 
 **Input:**
-- `scripts/review_pr_diff.sh mskrajnowski/forge-skills-sandbox <pr> stats` (then `diff`)
-- `scripts/get_pr_summary.sh mskrajnowski/forge-skills-sandbox <pr>`
-- `scripts/request_pr_review.sh mskrajnowski/forge-skills-sandbox <pr> mskrajnowski`
-- `echo "Closes #1" | scripts/update_pr.sh mskrajnowski/forge-skills-sandbox <pr> --body -`
+- `scripts/review_pr_diff.sh <test-repo> <pr> stats` (then `diff`)
+- `scripts/get_pr_summary.sh <test-repo> <pr>`
+- `scripts/request_pr_review.sh <test-repo> <pr> mskrajnowski`
+- `echo "Closes #1" | scripts/update_pr.sh <test-repo> <pr> --body -`
 
 **Expected:**
 - Diff/stats show the changed files; the summary is a one-call overview (state, mergeable, stats, unresolved comment count, description, timeline).
