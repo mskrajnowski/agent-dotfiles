@@ -4,15 +4,15 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 1: open a PR (live)
 
-**Input:** `scripts/open_pr.sh mskrajnowski/agent-dotfiles test/skill-demo main "test: skill demo"`
+**Input:** `scripts/open_pr.sh mskrajnowski/forge-skills-sandbox test/skill-demo main "test: skill demo"`
 
 **Expected:**
 - Output is exactly `PR #<n> opened: http://forge.local/...` — no raw JSON.
 - PR is visible on the forge. Close it afterwards.
 
-## Scenario 2: fetch review comments (live, PR #1)
+## Scenario 2: fetch review comments (live, sandbox PR with reviews)
 
-**Input:** `scripts/review_pr_comments.sh mskrajnowski/agent-dotfiles 1`
+**Input:** `scripts/review_pr_comments.sh mskrajnowski/forge-skills-sandbox 1`
 
 **Expected:**
 - Review states printed, comments flattened with `resolved=` status, `path:line`, author, and truncated bodies. No raw JSON dump.
@@ -20,7 +20,7 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 3: list PRs
 
-**Input:** `scripts/list_prs.sh mskrajnowski/agent-dotfiles` and `... all`
+**Input:** `scripts/list_prs.sh mskrajnowski/forge-skills-sandbox` and `... all`
 
 **Expected:** `#index [state] title (head->base)` lines; open by default, all includes merged/closed.
 

@@ -4,13 +4,13 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 1: create an issue (live)
 
-**Input:** `scripts/open_issue.sh mskrajnowski/agent-dotfiles "test: skill demo" "Created by forge-issue regression test."`
+**Input:** `scripts/open_issue.sh mskrajnowski/forge-skills-sandbox "test: skill demo" "Created by forge-issue regression test."`
 
 **Expected:** output `Issue #<n> opened: http://forge.local/...`; issue visible on the forge; close/clean up afterwards.
 
 ## Scenario 2: list issues
 
-**Input:** `scripts/list_issues.sh mskrajnowski/agent-dotfiles`
+**Input:** `scripts/list_issues.sh mskrajnowski/forge-skills-sandbox`
 
 **Expected:** `#index [state] title` lines; only open issues by default.
 
