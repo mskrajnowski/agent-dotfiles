@@ -38,7 +38,8 @@ jq -rn --slurpfile pr "$tmp" --slurpfile revs "$tmp2" --slurpfile rc "$tmp3" --s
   ($pr[0]) as $p | ($revs[0]) as $revs | ($rc[0]) as $comments | ($tl[0] // []) as $tl |
   ($comments | map(select(.resolver != null)) | length) as $resolved |
   ($comments | length) as $cc |
-  "PR #\($p.number) [\($p.state)] mergeable=\($p.mergeable // "?")",
+  ($p.mergeable) as $m |
+  "PR #\($p.number) [\($p.state)] mergeable=\(if $m == true then "true" elif $m == false then "FALSE — conflicts with \($p.base.ref): merge or rebase main into the branch and resolve" else "unknown (forge is recomputing; retry)" end)",
   "  title: \($p.title)",
   "  head->base: \($p.head.ref) -> \($p.base.ref) | changed: \($p.changed_files // "?") files, +\($p.additions // 0) -\($p.deletions // 0)",
   "  review comments: \($cc) total, \($cc - $resolved) unresolved, \($resolved) resolved",
