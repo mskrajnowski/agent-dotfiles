@@ -24,7 +24,6 @@ The user's forge is a local Forgejo instance at `http://forge.local`. It is the 
 New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
 
 - Python 3.12+ uv scripts (PEP 723): `#!/usr/bin/env -S uv run --script` shebang and an inline `dependencies = ["requests"]` header, so uv provisions dependencies on first run.
-- Guard the `import requests` with a `try/except ModuleNotFoundError` that exits with a one-line hint to run the script via uv, so a bare-`python` invocation fails with clear instructions instead of a confusing traceback (see the existing scripts).
 - Use `requests` directly — there is deliberately no shared client module. Each script defines its own `FORGE_URL`/`BASE`/`TIMEOUT` constants, creates a `requests.Session()` (auth is picked up from `~/.netrc` automatically — never set an explicit `auth=` or Authorization header, that would override netrc), and passes `timeout=TIMEOUT` on every call.
 - Each caller parses its own response: `.json()` when the endpoint returns JSON, `.text` for plain-text endpoints (e.g. the `.diff` URL). Never dump raw JSON to stdout.
 - Each script carries its own tiny `fail(resp, context)` helper that prints `ERROR: HTTP <code>[ (<context>)]` plus the API's `.message` to stderr and exits 1 — keep the error contract identical across scripts.
