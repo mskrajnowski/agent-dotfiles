@@ -1,5 +1,6 @@
 [tool_alias]
 mergiraf = "forgejo:mergiraf/mergiraf"
+skills-ref = "pipx:skills-ref"
 
 [tools]
 claude = "latest"
@@ -9,6 +10,7 @@ jj = "latest"
 jq = "latest"
 mergiraf = "latest"
 pi = "latest"
+"pipx:skills-ref" = "latest"
 ripgrep = "latest"
 starship = "latest"
 usage = "latest"
