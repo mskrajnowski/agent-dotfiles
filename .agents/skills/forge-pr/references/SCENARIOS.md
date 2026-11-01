@@ -24,6 +24,17 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 **Expected:** `#index [state] title (head->base)` lines; open by default, all includes merged/closed.
 
+## Scenario 3b: add comment + reply to review comment (live)
+
+**Input:**
+- `scripts/add_pr_comment.sh mskrajnowski/forge-skills-sandbox <pr> "Addressed in commit abc1234"`
+- `scripts/reply_pr_review_comment.sh mskrajnowski/forge-skills-sandbox <pr> <review-id> <comment-id> "Fixed by …"`
+- `scripts/add_pr_review_comment.sh mskrajnowski/forge-skills-sandbox <pr> <path> <line> "Question: …"`
+
+**Expected:**
+- Each script prints a confirmation id (comment id / review id) — no raw JSON, no `null` fields.
+- `review_pr_comments.sh` afterwards shows the quoted reply as a PR comment and the inline comment with its diff hunk.
+
 ## Scenario 4: merge refusal
 
 **Input:** user asks to merge a PR.

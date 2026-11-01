@@ -34,6 +34,30 @@ scripts/review_pr_comments.sh <owner>/<repo> <index>
 
 Prints each review's state and every comment (`id`, `path`, `line`, `author`, `body`), plus which comments are already resolved. This is the core loop for addressing feedback: read comments → fix code → commit → force-push (`--force-with-lease`) → resolve the comment when done.
 
+### Add a general PR comment
+
+```bash
+scripts/add_pr_comment.sh <owner>/<repo> <index> <text|->
+```
+
+Use to summarize what was addressed (mention the commit), explain decisions, or give status updates.
+
+### Add an inline review comment
+
+```bash
+scripts/add_pr_review_comment.sh <owner>/<repo> <index> <path> <line> <text|->
+```
+
+Marks a specific place in the diff — use to flag spots needing the user's feedback (architecture decisions, unclear instructions, alternatives worth discussing).
+
+### Reply to a review comment
+
+```bash
+scripts/reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-id> <text|->
+```
+
+Posts a quoted reply (original author, file:line, and body) as a PR comment — the forge API has no threaded replies for review comments. The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`).
+
 ### Merging
 
 Agents never merge PRs. After the PR is opened and review feedback is addressed, hand the decision to the user. If asked to merge, explain that merging is the user's action.
