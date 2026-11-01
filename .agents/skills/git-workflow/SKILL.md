@@ -61,6 +61,7 @@ Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): su
 ## 6. Keep PR history stable
 
 - Once a PR is open, do not rewrite its pushed history. Review comments map to specific commits; rewriting breaks that traceability.
+- Exception: when stuck, share your state with a `wip: ...` commit and push it. Once you and the developer have figured things out, amend or fixup those commits away — a `wip:` commit is scaffolding, not history.
 - Cleaning up a messy history is welcome right before the developer merges. If the history is messy at review time, suggest a cleanup pass (squash fixup commits, interactive rebase) as part of the handoff.
 
 ## 7. Staying in sync with the target branch
