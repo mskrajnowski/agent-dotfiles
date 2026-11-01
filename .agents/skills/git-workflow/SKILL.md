@@ -49,6 +49,10 @@ Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): su
 ## 5. Open the PR early
 
 - Open the PR as soon as the branch has its first meaningful commit, and push regularly. The developer can follow progress in the PR before review even starts.
+- Keep the PR title and description current as work progresses:
+    - **Title** describes the task — the goal, not the current state. Set it once when opening the PR; it should rarely need editing.
+    - **Description** states the goal and the current state of the implementation. Update it after meaningful progress. A short checklist of what is done and what remains before the change is ready for final review keeps progress visible at a glance — tick items off as you go, remove them once everything is complete.
+- Use the `forge-pr` skill's `update_pr.py` to refresh title and description.
 - Commits stay atomic; the PR is the unit of completion — it carries the full set of commits needed to finish the task.
 - Use the `forge-pr` skill for PRs on the forge (`forge.local`): `git push -u origin <branch>`, then open the PR there.
 - The PR summary states what changed and how it was verified (tests run, checks). If something could not run, say so.
