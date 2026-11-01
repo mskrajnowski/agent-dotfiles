@@ -1,0 +1,52 @@
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["requests"]
+# ///
+# List issues in a repo: one line per issue — number, state, title.
+
+import argparse
+import contextlib
+import sys
+
+import requests
+
+FORGE_URL = "http://forge.local"
+BASE = FORGE_URL + "/api/v1"
+TIMEOUT = 30
+
+
+def fail(resp: requests.Response, context: str = "") -> None:
+    """Print 'ERROR: HTTP <code>[ (<context>)]' plus the API message; exit 1."""
+    message = f"ERROR: HTTP {resp.status_code}"
+    if context:
+        message += f" ({context})"
+    print(message, file=sys.stderr)
+    with contextlib.suppress(ValueError, KeyError):
+        print(resp.json()["message"], file=sys.stderr)
+    sys.exit(1)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="List issues in a repo.")
+    parser.add_argument("repo", metavar="owner/repo")
+    parser.add_argument("state", nargs="?", default="open", choices=("open", "closed", "all"))
+    args = parser.parse_args()
+
+    session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
+    resp = session.get(
+        f"{BASE}/repos/{args.repo}/issues",
+        params={"state": args.state, "limit": 50, "type": "issues"},
+        timeout=TIMEOUT,
+    )
+    if resp.status_code != 200:
+        fail(resp)
+    for issue in resp.json():
+        print(f"#{issue['number']} [{issue['state']}] {issue['title']}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except requests.ConnectionError as exc:
+        sys.exit(f"ERROR: cannot reach {FORGE_URL}: {exc}")

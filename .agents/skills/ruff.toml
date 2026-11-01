@@ -1,0 +1,7 @@
+# Ruff configuration for the forge skills' Python scripts.
+# Formatted with `ruff format`, checked with `ruff check` (0.17+).
+target-version = "py312"
+line-length = 100
+
+[lint]
+select = ["E", "W", "F", "I", "B", "SIM", "UP", "RUF"]

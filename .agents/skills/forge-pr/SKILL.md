@@ -12,7 +12,7 @@ Scripts live in this skill's directory; run them with the skill dir as cwd or vi
 ### Open a PR
 
 ```bash
-scripts/open_pr.sh <owner>/<repo> <head> <base> <title> [body]
+scripts/open_pr.py <owner>/<repo> <head> <base> <title> [body]
 ```
 
 - `body` optional; reads stdin if `-` is passed. Returns the PR number and URL.
@@ -21,7 +21,7 @@ scripts/open_pr.sh <owner>/<repo> <head> <base> <title> [body]
 ### List PRs
 
 ```bash
-scripts/list_prs.sh <owner>/<repo> [state]   # state: open|closed|all, default open
+scripts/list_prs.py <owner>/<repo> [state]   # state: open|closed|all, default open
 ```
 
 Prints `#index [state] title (head→base)` per PR.
@@ -29,7 +29,7 @@ Prints `#index [state] title (head→base)` per PR.
 ### Fetch review comments
 
 ```bash
-scripts/review_pr_comments.sh <owner>/<repo> <index>
+scripts/review_pr_comments.py <owner>/<repo> <index>
 ```
 
 Prints each review's state and every comment (`id`, `path`, `line`, `author`, `body`), plus which comments are already resolved. This is the core loop for addressing feedback: read comments → fix code → commit → force-push (`--force-with-lease`) → reply to each addressed comment with the short commit SHA.
@@ -37,7 +37,7 @@ Prints each review's state and every comment (`id`, `path`, `line`, `author`, `b
 ### Add a general PR comment
 
 ```bash
-scripts/add_pr_comment.sh <owner>/<repo> <index> <text|->
+scripts/add_pr_comment.py <owner>/<repo> <index> <text|->
 ```
 
 Use to summarize what was addressed (mention the commit), explain decisions, or give status updates.
@@ -45,7 +45,7 @@ Use to summarize what was addressed (mention the commit), explain decisions, or 
 ### Add an inline review comment
 
 ```bash
-scripts/add_pr_review_comment.sh <owner>/<repo> <index> <path> <line> <text|->
+scripts/add_pr_review_comment.py <owner>/<repo> <index> <path> <line> <text|->
 ```
 
 Marks a specific place in the diff — use to flag spots needing the user's feedback (architecture decisions, unclear instructions, alternatives worth discussing).
@@ -53,10 +53,10 @@ Marks a specific place in the diff — use to flag spots needing the user's feed
 ### Reply to a review comment
 
 ```bash
-scripts/reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-id> <text|->
+scripts/reply_pr_review_comment.py <owner>/<repo> <index> <review-id> <comment-id> <text|->
 ```
 
-The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`). Behavior depends on the comment type:
+The comment ids come from `review_pr_comments.py` output (`COMMENT <review-id>-<id>`). Behavior depends on the comment type:
 
 - **Threaded review comment** (has a file anchor): the reply is posted on the same review with the same path and positions — forgejo groups it into the original thread (the API has no explicit `in_reply_to`; thread membership is by review + path + position). The reply body is plain text — do not quote the original; the thread already shows it above the reply.
 - **Free-standing comment** (no file anchor): the reply is posted as a general PR comment quoting the original (author, id, body), since free-standing comments get no thread UI.
@@ -66,7 +66,7 @@ The script warns when the branch has moved since the comment was made — a repl
 ### Review the PR diff
 
 ```bash
-scripts/review_pr_diff.sh <owner>/<repo> <index> [diff|stats]
+scripts/review_pr_diff.py <owner>/<repo> <index> [diff|stats]
 ```
 
 - `diff` (default) — full unified diff of the PR. Write large diffs to a file and summarize.
@@ -77,7 +77,7 @@ Use before opening a PR to double-check its contents, and when reviewing what a 
 ### Get PR summary
 
 ```bash
-scripts/get_pr_summary.sh <owner>/<repo> <index>
+scripts/get_pr_summary.py <owner>/<repo> <index>
 ```
 
 One-call summary: state, mergeability, head→base, change stats, unresolved review comment count, requested reviewers, review states, the PR description, and a compact event timeline. Use to check a PR's situation without dumping JSON or reading the whole conversation.
@@ -85,7 +85,7 @@ One-call summary: state, mergeability, head→base, change stats, unresolved rev
 ### Request review
 
 ```bash
-scripts/request_pr_review.sh <owner>/<repo> <index> <username>...
+scripts/request_pr_review.py <owner>/<repo> <index> <username>...
 ```
 
 Requests (or re-requests) review. Re-request after force-pushing fixes.
@@ -93,7 +93,7 @@ Requests (or re-requests) review. Re-request after force-pushing fixes.
 ### Update a PR
 
 ```bash
-scripts/update_pr.sh <owner>/<repo> <index> [--title <text>] [--body <text|-|->]
+scripts/update_pr.py <owner>/<repo> <index> [--title <text>] [--body <text|-|->]
 ```
 
 Title and body only — state changes (close/reopen) are the user's action.
