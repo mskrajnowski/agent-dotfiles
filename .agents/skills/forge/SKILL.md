@@ -15,7 +15,7 @@ The user's forge is a local Forgejo instance at `http://forge.local`. It is the 
 - **Output discipline:** never dump raw JSON into context. Write responses to a file and summarize, filter with `jq`, or use the dedicated scripts in `forge-pr` and `forge-issue` (they do this for you).
 - **Discover endpoints:** the full OpenAPI schema is at `http://forge.local/swagger.v1.json` — fetch it and search for the operation you need rather than guessing.
 - **User actions:** the user merges PRs, closes/reopens PRs and issues, resolves review comments, and manages labels — the forge UI is theirs, and some of these (e.g. resolving review comments) have no API endpoint. Agents point to fixes by replying with short commit SHAs instead.
-- **Sandbox:** a `forge-skills-sandbox` repo exists under the user's account for testing scripts and skills (find it with `GET /repos/search?q=forge-skills-sandbox`) — never test against real repos. Create throwaway PRs/issues/branches there and leave the user to clean them up.
+- **Sandbox:** `mskrajnowski/forge-skills-sandbox` exists for testing scripts and skills — never test against real repos. Create throwaway PRs/issues/branches there and leave the user to clean them up.
 
 ## Writing forge scripts
 

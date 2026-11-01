@@ -2,17 +2,16 @@
 
 Real-world scenarios for verifying this skill. Run each after edits to the skill and record pass/fail.
 
-Resolve `<user>` by searching for the sandbox repo: `GET /repos/search?q=forge-skills-sandbox` — it is `forge-skills-sandbox` under the user's account (see the `forge` skill).
 
 ## Scenario 1: create an issue (live)
 
-**Input:** `scripts/open_issue.sh <user>/forge-skills-sandbox "test: skill demo" "Created by forge-issue regression test."`
+**Input:** `scripts/open_issue.sh mskrajnowski/forge-skills-sandbox "test: skill demo" "Created by forge-issue regression test."`
 
 **Expected:** output `Issue #<n> opened: http://forge.local/...`; issue visible on the forge.
 
 ## Scenario 2: list issues
 
-**Input:** `scripts/list_issues.sh <user>/forge-skills-sandbox`
+**Input:** `scripts/list_issues.sh mskrajnowski/forge-skills-sandbox`
 
 **Expected:** `#index [state] title` lines; only open issues by default.
 
@@ -24,13 +23,13 @@ Resolve `<user>` by searching for the sandbox repo: `GET /repos/search?q=forge-s
 
 ## Scenario 3a: update an issue (live)
 
-**Input:** `scripts/update_issue.sh <user>/forge-skills-sandbox <issue> --title "..." --body -` (body from stdin)
+**Input:** `scripts/update_issue.sh mskrajnowski/forge-skills-sandbox <issue> --title "..." --body -` (body from stdin)
 
 **Expected:** confirmation line; `get_issue_summary.sh` shows the new title/body. Only title and body — no state change.
 
 ## Scenario 3b: issue summary (live)
 
-**Input:** `scripts/get_issue_summary.sh <user>/forge-skills-sandbox <issue>`
+**Input:** `scripts/get_issue_summary.sh mskrajnowski/forge-skills-sandbox <issue>`
 
 **Expected:** state, title, labels, description, and chronological event lines (comments, state changes) — no raw JSON.
 
