@@ -29,7 +29,7 @@ Prints `#index [state] title (head→base)` per PR.
 ### Fetch review comments
 
 ```bash
-scripts/pr_reviews.sh <owner>/<repo> <index>
+scripts/review_pr_comments.sh <owner>/<repo> <index>
 ```
 
 Prints each review's state and every comment (`id`, `path`, `line`, `author`, `body`), plus which comments are already resolved. This is the core loop for addressing feedback: read comments → fix code → commit → force-push (`--force-with-lease`) → resolve the comment when done.

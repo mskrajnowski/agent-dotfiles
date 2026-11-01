@@ -28,7 +28,7 @@ Prints `#index [state] title` per issue.
 ### Fetch issue comments
 
 ```bash
-scripts/issue_comments.sh <owner>/<repo> <index>
+scripts/review_issue_comments.sh <owner>/<repo> <index>
 ```
 
 Prints `id`, `author`, and body (truncated) per comment. Use to review discussion before acting.
@@ -36,7 +36,7 @@ Prints `id`, `author`, and body (truncated) per comment. Use to review discussio
 ### Comment on an issue
 
 ```bash
-scripts/comment_issue.sh <owner>/<repo> <index> <text|->
+scripts/add_issue_comment.sh <owner>/<repo> <index> <text|->
 ```
 
 Reads the comment from stdin if `-` is passed. Prints the new comment's id.

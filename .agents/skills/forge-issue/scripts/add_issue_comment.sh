@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Add a comment to an issue.
-# Usage: comment_issue.sh <owner>/<repo> <index> <text|->
+# Usage: add_issue_comment.sh <owner>/<repo> <index> <text|->
 #   text "-" reads the comment body from stdin.
 # Prints: new comment id on success.
 set -euo pipefail

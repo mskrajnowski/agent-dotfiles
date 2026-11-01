@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fetch reviews and review comments for a PR, flattened for agent use.
-# Usage: pr_reviews.sh <owner>/<repo> <pr-index>
+# Usage: review_pr_comments.sh <owner>/<repo> <pr-index>
 # Prints: review states, then each comment: id, resolved status, file:line,
 # author, and body. Body is truncated to 3 lines.
 set -euo pipefail

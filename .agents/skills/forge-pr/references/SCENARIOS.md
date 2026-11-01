@@ -12,7 +12,7 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 2: fetch review comments (live, PR #1)
 
-**Input:** `scripts/pr_reviews.sh mskrajnowski/agent-dotfiles 1`
+**Input:** `scripts/review_pr_comments.sh mskrajnowski/agent-dotfiles 1`
 
 **Expected:**
 - Review states printed, comments flattened with `resolved=` status, `path:line`, author, and truncated bodies. No raw JSON dump.

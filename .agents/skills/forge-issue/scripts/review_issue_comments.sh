@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fetch comments for an issue.
-# Usage: issue_comments.sh <owner>/<repo> <index>
+# Usage: review_issue_comments.sh <owner>/<repo> <index>
 # Prints: id, author, and body (truncated to 3 lines) per comment.
 set -euo pipefail
 
