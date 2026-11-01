@@ -1,4 +1,6 @@
 ^/install\.sh
+^/AGENTS.md
+^/\.pi/npm
 
 # Stow defaults:
 # Comments and blank lines are allowed.
