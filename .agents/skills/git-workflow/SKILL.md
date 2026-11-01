@@ -49,6 +49,7 @@ Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): su
 ## 5. Open the PR early
 
 - Open the PR as soon as the branch has its first meaningful commit, and push regularly. The developer can follow progress in the PR before review even starts.
+- Never end a turn with unpushed commits — if a change was made, it is committed and pushed, or it didn't happen. Verify with `git status` before reporting completion.
 - Keep the PR title and description current as work progresses:
     - **Title** describes the task — the goal, not the current state. Set it once when opening the PR; it should rarely need editing.
     - **Description** states the goal and the current state of the implementation. Update it after meaningful progress. A short checklist of what is done and what remains before the change is ready for final review keeps progress visible at a glance — tick items off as you go, remove them once everything is complete.
