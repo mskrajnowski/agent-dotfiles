@@ -24,8 +24,10 @@ code=$(curl --netrc -s -o "$tmp" -w "%{http_code}" "$base")
 orig=$(jq -r --argjson id "$cid" 'map(select(.id == $id)) | .[0] // empty' "$tmp")
 [[ -n $orig ]] || { echo "ERROR: comment $cid not found in review $review" >&2; exit 1; }
 
+author=$(jq -r '.user.login' <<<"$orig")
 path=$(jq -r '.path // empty' <<<"$orig")
-pos=$(jq -r '.position // 0' <<<"$orig")
+pos=$(jq -r '.position // .line // .original_line // "?"' <<<"$orig")
+body=$(jq -r '.body' <<<"$orig")
 if [[ -z $path ]]; then
   echo "ERROR: comment $cid is a free-standing comment (no path) — use add_pr_comment.sh instead" >&2
   exit 1
@@ -34,10 +36,19 @@ fi
 if [[ -z $text ]]; then echo "ERROR: missing reply text" >&2; exit 1; fi
 if [[ $text == - ]]; then text=$(cat); fi
 
+# Reply format matches the forge UI convention:
+#   In reply to @**<author>** (comment <id>, <path> line <pos>):
+#   > <original body quoted>
+#   <reply text>
+quoted=$(printf 'In reply to @**%s** (comment %s, %s line %s):\n%s\n%s' \
+  "$author" "$cid" "$path" "$pos" \
+  "$(echo "$body" | sed 's/^/> /')" \
+  "$text")
+
 code=$(curl --netrc -s -o "$tmp2" -w "%{http_code}" \
   -X POST "$base" \
   -H 'Content-Type: application/json' \
-  -d "$(jq -n --arg b "$text" --arg p "$path" --arg l "$pos" \
+  -d "$(jq -n --arg b "$quoted" --arg p "$path" --arg l "$pos" \
         '{body: $b, path: $p, new_position: ($l|tonumber)}')")
 
 if [[ $code == 200 || $code == 201 ]]; then
