@@ -47,7 +47,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): `typ
 - Push the branch to the remote and open a pull request against the default branch so the developer can review and merge.
 - Use the `forge-pr` skill for PRs on the forge (`forge.local`): `git push -u origin <branch>`, then open the PR there.
 - The PR summary states what changed and how it was verified (tests run, checks). If something could not run, say so.
-- Agents do not merge PRs or resolve review comments — the developer does. When asked to address review feedback, follow the `forge-pr` feedback loop: fix → commit → force-push (`--force-with-lease`) → reply to each addressed comment with the short commit SHA.
+- Agents do not merge PRs or resolve review comments — the developer does. When asked to address review feedback, follow the `forge-pr` feedback loop: fix → commit locally → reply to each addressed comment with the short commit SHA → push (`--force-with-lease`). Reply before pushing, per `forge-pr`.
 
 ## 6. Safety
 
