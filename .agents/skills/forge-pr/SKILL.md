@@ -56,7 +56,12 @@ Marks a specific place in the diff — use to flag spots needing the user's feed
 scripts/reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-id> <text|->
 ```
 
-Posts a review comment in the same review at the same path:line, which the forge UI groups into the original thread (the API has no explicit `in_reply_to`; thread membership is by review + path + position). After addressing feedback, reply with a short commit SHA — the forge renders bare SHAs as clickable commit links. The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`).
+The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`). Behavior depends on the comment type:
+
+- **Threaded review comment** (has a file anchor): the reply is posted on the same review with the same path and positions — forgejo groups it into the original thread (the API has no explicit `in_reply_to`; thread membership is by review + path + position). The reply body is plain text — do not quote the original; the thread already shows it above the reply.
+- **Free-standing comment** (no file anchor): the reply is posted as a general PR comment quoting the original (author, id, body), since free-standing comments get no thread UI.
+
+The script warns when the branch has moved since the comment was made — a reply posted against a changed diff can land as a separate thread. **Reply before pushing**: fix → commit locally → reply to each addressed comment with the short commit SHA (the forge renders bare SHAs as clickable links) → push.
 
 ### Review the PR diff
 
@@ -103,7 +108,7 @@ Agents never merge PRs. After the PR is opened and review feedback is addressed,
 
 - PR titles use Conventional Commits (per the repo's commit rules).
 - Reference the issues a PR resolves in its description (`Closes #N`, `Fixes #N`) — forgejo auto-closes them when the user merges.
-- After amending and force-pushing, reply to each addressed review comment with the short commit SHA, and re-request review.
+- When addressing review feedback: fix → commit locally → reply to each addressed comment with the short commit SHA → push. Reply before pushing — pushing changes the diff and can split replies into separate threads. Then re-request review.
 - Agents never edit or delete comments — post a new comment instead, so the discussion history stays traceable.
 - Agents never merge PRs, close/reopen PRs, resolve review comments, or manage labels — those are the user's actions on the forge UI. Reply with the commit that addressed the feedback instead; the user resolves it.
 - Review-comment fetching is read-only — safe to run repeatedly mid-session.
