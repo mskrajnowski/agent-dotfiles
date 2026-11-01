@@ -1,0 +1,56 @@
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["requests"]
+# ///
+# List pull requests in a repo: one line per PR — number, state, title,
+# head->base.
+
+import argparse
+import contextlib
+import sys
+
+import requests
+
+FORGE_URL = "http://forge.local"
+BASE = FORGE_URL + "/api/v1"
+TIMEOUT = 30
+
+
+def fail(resp: requests.Response, context: str = "") -> None:
+    """Print 'ERROR: HTTP <code>[ (<context>)]' plus the API message; exit 1."""
+    message = f"ERROR: HTTP {resp.status_code}"
+    if context:
+        message += f" ({context})"
+    print(message, file=sys.stderr)
+    with contextlib.suppress(ValueError, KeyError):
+        print(resp.json()["message"], file=sys.stderr)
+    sys.exit(1)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="List pull requests in a repo.")
+    parser.add_argument("repo", metavar="owner/repo")
+    parser.add_argument("state", nargs="?", default="open", choices=("open", "closed", "all"))
+    args = parser.parse_args()
+
+    session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
+    resp = session.get(
+        f"{BASE}/repos/{args.repo}/pulls",
+        params={"state": args.state, "limit": 50},
+        timeout=TIMEOUT,
+    )
+    if resp.status_code != 200:
+        fail(resp)
+    for pr in resp.json():
+        print(
+            f"#{pr['number']} [{pr['state']}] {pr['title']} "
+            f"({pr['head']['ref']}->{pr['base']['ref']})"
+        )
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except requests.ConnectionError as exc:
+        sys.exit(f"ERROR: cannot reach {FORGE_URL}: {exc}")

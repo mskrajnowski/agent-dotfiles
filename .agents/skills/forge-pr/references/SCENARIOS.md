@@ -6,7 +6,7 @@ Live scenarios run against a throwaway test repo you create first (see the `forg
 
 ## Scenario 1: open a PR (live)
 
-**Input:** `scripts/open_pr.sh <test-repo> test/skill-demo main "test: skill demo"`
+**Input:** `scripts/open_pr.py <test-repo> test/skill-demo main "test: skill demo"`
 
 **Expected:**
 - Output is exactly `PR #<n> opened: http://forge.local/...` — no raw JSON.
@@ -14,7 +14,7 @@ Live scenarios run against a throwaway test repo you create first (see the `forg
 
 ## Scenario 2: fetch review comments (live, sandbox PR with reviews)
 
-**Input:** `scripts/review_pr_comments.sh <test-repo> 1`
+**Input:** `scripts/review_pr_comments.py <test-repo> 1`
 
 **Expected:**
 - Review states printed, comments flattened with `resolved=` status, `path:line`, author, and truncated bodies. No raw JSON dump.
@@ -22,30 +22,30 @@ Live scenarios run against a throwaway test repo you create first (see the `forg
 
 ## Scenario 3: list PRs
 
-**Input:** `scripts/list_prs.sh <test-repo>` and `... all`
+**Input:** `scripts/list_prs.py <test-repo>` and `... all`
 
 **Expected:** `#index [state] title (head->base)` lines; open by default, all includes merged/closed.
 
 ## Scenario 3b: add comment + reply to review comment (live)
 
 **Input:**
-- `scripts/add_pr_comment.sh <test-repo> <pr> "Addressed in commit abc1234"`
-- `scripts/reply_pr_review_comment.sh <test-repo> <pr> <review-id> <comment-id> "Fixed by …"`
-- `scripts/add_pr_review_comment.sh <test-repo> <pr> <path> <line> "Question: …"`
+- `scripts/add_pr_comment.py <test-repo> <pr> "Addressed in commit abc1234"`
+- `scripts/reply_pr_review_comment.py <test-repo> <pr> <review-id> <comment-id> "Fixed by …"`
+- `scripts/add_pr_review_comment.py <test-repo> <pr> <path> <line> "Question: …"`
 
 **Expected:**
 - Each script prints a confirmation id (comment id / review id) — no raw JSON, no `null` fields.
-- Reply to a **threaded** comment: body is plain text — no quote, no "In reply to" header; `review_pr_comments.sh` shows it at the same path:line as the original (same thread).
+- Reply to a **threaded** comment: body is plain text — no quote, no "In reply to" header; `review_pr_comments.py` shows it at the same path:line as the original (same thread).
 - Reply to a **free-standing** comment (no path): posted as a PR comment quoting the original in forgejo's reply format — `@<author> wrote in <PR permalink>:`, blank line, blockquoted original, blank line, reply text.
 - Replying after the branch has moved prints a `WARN` about possible thread splitting.
 
 ## Scenario 3c: diff, status, review request, update (live)
 
 **Input:**
-- `scripts/review_pr_diff.sh <test-repo> <pr> stats` (then `diff`)
-- `scripts/get_pr_summary.sh <test-repo> <pr>`
-- `scripts/request_pr_review.sh <test-repo> <pr> mskrajnowski`
-- `echo "Closes #1" | scripts/update_pr.sh <test-repo> <pr> --body -`
+- `scripts/review_pr_diff.py <test-repo> <pr> stats` (then `diff`)
+- `scripts/get_pr_summary.py <test-repo> <pr>`
+- `scripts/request_pr_review.py <test-repo> <pr> mskrajnowski`
+- `echo "Closes #1" | scripts/update_pr.py <test-repo> <pr> --body -`
 
 **Expected:**
 - Diff/stats show the changed files; the summary is a one-call overview (state, mergeable, stats, unresolved comment count, description, timeline).

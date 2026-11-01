@@ -22,10 +22,15 @@ The user's forge is a local Forgejo instance at `http://forge.local`. It is the 
 
 New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
 
-- Self-contained bash; `set -euo pipefail`; `mktemp` files with a `trap ... EXIT` cleanup.
-- Build JSON payloads with `jq -n --arg ...`; never inline untrusted text into JSON strings.
-- On success print a one-line confirmation (with ids, path:line, or short SHA). On failure print `ERROR: HTTP <code>` plus the response's `.message` to stderr and `exit 1`.
+- Python 3.12+ uv scripts (PEP 723): `#!/usr/bin/env -S uv run --script` shebang and an inline `dependencies = ["requests"]` header, so uv provisions dependencies on first run.
+- Use `requests` directly — there is deliberately no shared client module. Each script defines its own `FORGE_URL`/`BASE`/`TIMEOUT` constants, creates a `requests.Session()` (auth is picked up from `~/.netrc` automatically — never set an explicit `auth=` or Authorization header, that would override netrc), and passes `timeout=TIMEOUT` on every call.
+- Each caller parses its own response: `.json()` when the endpoint returns JSON, `.text` for plain-text endpoints (e.g. the `.diff` URL). Never dump raw JSON to stdout.
+- Each script carries its own tiny `fail(resp, context)` helper that prints `ERROR: HTTP <code>[ (<context>)]` plus the API's `.message` to stderr and exits 1 — keep the error contract identical across scripts.
+- CLI and presentation helpers (stdin `-` handling, indentation, timeline rendering) live directly in the scripts that use them — don't re-extract them into a shared module.
+- Parse the CLI with `argparse` (types for indexes, `choices` for states); don't hand-roll positional/flag parsing.
+- On success print a one-line confirmation (with ids, path:line, or short SHA). On failure print `ERROR: HTTP <code>` plus the response's `.message` to stderr and `exit 1` (the `fail()` helper does this).
 - Keep output for agent eyes: truncate comment bodies and timelines; never emit raw JSON.
+- Format and lint with `ruff` (config in `.agents/skills/ruff.toml`): `uvx ruff format` and `uvx ruff check --fix` over the changed script dirs.
 
 ## Which skill to use
 
