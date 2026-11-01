@@ -8,7 +8,7 @@
     "openrouter/z-ai/glm-5.3-flash"
   ],
   "defaultThinkingLevel": "low",
-  "packages": ["npm:pi-web-access", "npm:context-mode", "npm:pi-subagents"],
+  "packages": ["npm:pi-web-access", "npm:pi-subagents"],
   "subagents": {
     "defaultModel": "z-ai/glm-5.3-flash",
     "defaultThinking": "low",
