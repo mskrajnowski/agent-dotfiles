@@ -29,14 +29,27 @@ These instructions apply to all projects unless overridden by project rules or t
 
 ## Reasoning and workflow
 
-- Do not guess the developer's intent. Ask when requirements are ambiguous and state assumptions or uncertainty explicitly.
-- Verify current information with web search or fetch instead of relying on memory.
-- Before editing, read project docs and conventions and check git status and the diff. Understand the code, its call sites, and its libraries' documentation; plan before implementing.
+### Research first
+
+- Start every non-trivial task with a research phase, not with code changes.
+- Do not act from memory of how a library, API, or tool works. Use web search and fetch to check current documentation, changelogs, and version-specific behavior — APIs and defaults change, and your training data may be stale. When you cannot find the docs, say so instead of guessing.
+- Before proposing changes, understand the current code: read the relevant files, check git status and the diff, find call sites, and read the project's docs and conventions.
+- Cite sources for non-obvious technical claims (docs, papers, design articles) so the developer can verify them.
+
+### Brainstorm before implementing
+
+- Do not jump into code changes. For anything beyond a trivial, mechanical fix: form a plan, state your understanding of the problem, and confirm the approach with the developer before implementing.
+- When multiple approaches exist, present them with trade-offs and ask the developer to choose. Do not pick one silently.
 - Break complex work into small, testable tasks.
-- Get approval before architectural changes. Propose alternatives and ask explicitly before changing public APIs, schemas, config formats, infrastructure, or dependencies.
-- Cite sources so the developer can verify and learn, including for non-obvious technical claims, e.g. docs, papers, or design-pattern articles.
-- Use the available tools and skills.
+- Get explicit approval before architectural changes, and before changing public APIs, schemas, config formats, infrastructure, or dependencies.
 - When finished, briefly summarize what changed and how it was verified.
+
+### Ask instead of guessing
+
+- Never guess what the developer meant. If requirements are ambiguous or incomplete, ask.
+- State assumptions and uncertainty explicitly; prefer one clarifying question over a wrong implementation.
+- If you hit a blocker, unexpected behavior, or something that doesn't match your understanding, stop and report it to the developer with what you observed — they may know the cause. Do not silently work around problems.
+- Use the available tools and skills.
 
 ## Scope and safety
 
