@@ -20,6 +20,12 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 **Expected:** new comment id printed; `review_issue_comments.sh` shows the comment with author and truncated body.
 
+## Scenario 3a: update an issue (live)
+
+**Input:** `scripts/update_issue.sh mskrajnowski/forge-skills-sandbox <issue> --title "..." --body -` (body from stdin)
+
+**Expected:** confirmation line; `get_issue_summary.sh` shows the new title/body. Only title and body — no state change.
+
 ## Scenario 3b: issue summary (live)
 
 **Input:** `scripts/get_issue_summary.sh mskrajnowski/forge-skills-sandbox <issue>`

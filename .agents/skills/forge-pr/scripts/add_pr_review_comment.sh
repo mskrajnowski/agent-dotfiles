@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Add an inline review comment at a specific file and line.
-# Usage: add_pr_review_comment.sh <owner>/<repo> <pr-index> <path> <line> <text|->
+# Usage: add_pr_review_comment.sh <owner>/<repo> <index> <path> <line> <text|->
 #   line: line number in the new version of the file.
 #   text "-" reads the comment body from stdin.
 # Prints: review id and comment id on success.
 set -euo pipefail
 
-repo=${1:?usage: add_pr_review_comment.sh <owner>/<repo> <pr-index> <path> <line> <text|->}
+repo=${1:?usage: add_pr_review_comment.sh <owner>/<repo> <index> <path> <line> <text|->}
 index=${2:?missing PR index}
 path=${3:?missing file path}
 line=${4:?missing line number}

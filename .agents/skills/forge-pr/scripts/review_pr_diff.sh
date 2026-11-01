@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Show the diff of a pull request (what the PR changes).
-# Usage: review_pr_diff.sh <owner>/<repo> <pr-index> [mode]
+# Usage: review_pr_diff.sh <owner>/<repo> <index> [mode]
 #   mode: diff (default) — full unified diff
 #         stats          — one line per changed file (adds/deletes)
 # Prints: the diff, or file stats, to stdout.
 set -euo pipefail
 
-repo=${1:?usage: review_pr_diff.sh <owner>/<repo> <pr-index> [diff|stats]}
+repo=${1:?usage: review_pr_diff.sh <owner>/<repo> <index> [diff|stats]}
 index=${2:?missing PR index}
 mode=${3:-diff}
 

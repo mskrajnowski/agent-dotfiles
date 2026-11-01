@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Update a pull request's title, body, and/or state.
-# Usage: update_pr.sh <owner>/<repo> <pr-index> [--title <text>] [--body <text|-|->] [--state open|closed]
+# Usage: update_pr.sh <owner>/<repo> <index> [--title <text>] [--body <text|-|->] [--state open|closed]
 #   --body -  reads the body from stdin.
 # Prints: confirmation on success.
 set -euo pipefail
 
-repo=${1:?usage: update_pr.sh <owner>/<repo> <pr-index> [--title t] [--body t|-] [--state open|closed]}
+repo=${1:?usage: update_pr.sh <owner>/<repo> <index> [--title t] [--body t|-] [--state open|closed]}
 index=${2:?missing PR index}
 shift 2
 

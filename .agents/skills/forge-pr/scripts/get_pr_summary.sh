@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Summarize a pull request in one call: status, description, and timeline.
-# Usage: get_pr_summary.sh <owner>/<repo> <pr-index>
+# Usage: get_pr_summary.sh <owner>/<repo> <index>
 # Prints: state, mergeability, head->base, change stats, total and
 # unresolved review comment counts, requested reviewers, reviews,
 # the PR description, and a compact event timeline.
 set -euo pipefail
 
-repo=${1:?usage: get_pr_summary.sh <owner>/<repo> <pr-index>}
+repo=${1:?usage: get_pr_summary.sh <owner>/<repo> <index>}
 index=${2:?missing PR index}
 
 base=http://forge.local/api/v1/repos/${repo}

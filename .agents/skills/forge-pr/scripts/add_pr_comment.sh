@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Add a general comment to a pull request (PRs are issues on the forge).
-# Usage: add_pr_comment.sh <owner>/<repo> <pr-index> <text|->
+# Usage: add_pr_comment.sh <owner>/<repo> <index> <text|->
 #   text "-" reads the comment body from stdin.
 # Prints: new comment id on success.
 set -euo pipefail
 
-repo=${1:?usage: add_pr_comment.sh <owner>/<repo> <pr-index> <text|->}
+repo=${1:?usage: add_pr_comment.sh <owner>/<repo> <index> <text|->}
 index=${2:?missing PR index}
 text=${3:-}
 

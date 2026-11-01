@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Summarize an issue in one call: state, description, and timeline.
-# Usage: get_issue_summary.sh <owner>/<repo> <issue-index>
+# Usage: get_issue_summary.sh <owner>/<repo> <index>
 # Prints: state, title, labels, the issue description, and a compact
 # event timeline (comments, state changes, label events).
 set -euo pipefail
 
-repo=${1:?usage: get_issue_summary.sh <owner>/<repo> <issue-index>}
+repo=${1:?usage: get_issue_summary.sh <owner>/<repo> <index>}
 index=${2:?missing issue index}
 
 base=http://forge.local/api/v1/repos/${repo}/issues/${index}

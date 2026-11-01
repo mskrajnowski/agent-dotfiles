@@ -2,12 +2,12 @@
 # Reply to a review comment by posting a review comment in the same review
 # at the same path:line — the forge UI groups those into one thread.
 # (The API has no explicit in_reply_to; thread membership is by path+position.)
-# Usage: reply_pr_review_comment.sh <owner>/<repo> <pr-index> <review-id> <comment-id> <text|->
+# Usage: reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-id> <text|->
 #   text "-" reads the reply body from stdin.
 # Prints: reply comment id on success.
 set -euo pipefail
 
-repo=${1:?usage: reply_pr_review_comment.sh <owner>/<repo> <pr-index> <review-id> <comment-id> <text|->}
+repo=${1:?usage: reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-id> <text|->}
 index=${2:?missing PR index}
 review=${3:?missing review id}
 cid=${4:?missing comment id}

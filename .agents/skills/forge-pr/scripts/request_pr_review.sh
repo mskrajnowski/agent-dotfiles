@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Request (or re-request) a review for a pull request.
-# Usage: request_pr_review.sh <owner>/<repo> <pr-index> <username>...
+# Usage: request_pr_review.sh <owner>/<repo> <index> <username>...
 # Prints: confirmation with the requested usernames on success.
 set -euo pipefail
 
-repo=${1:?usage: request_pr_review.sh <owner>/<repo> <pr-index> <username>...}
+repo=${1:?usage: request_pr_review.sh <owner>/<repo> <index> <username>...}
 index=${2:?missing PR index}
 shift 2
 [[ $# -ge 1 ]] || { echo "ERROR: missing reviewer username(s)" >&2; exit 1; }

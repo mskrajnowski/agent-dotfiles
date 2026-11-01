@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Fetch reviews and review comments for a PR, flattened for agent use.
-# Usage: review_pr_comments.sh <owner>/<repo> <pr-index>
+# Usage: review_pr_comments.sh <owner>/<repo> <index>
 # Prints: review states, then each comment: id, resolved status, file:line,
 # author, and body. Body is truncated to 3 lines.
 set -euo pipefail
 
-repo=${1:?usage: review_pr_comments.sh <owner>/<repo> <pr-index>}
+repo=${1:?usage: review_pr_comments.sh <owner>/<repo> <index>}
 index=${2:?missing PR index}
 
 base=http://forge.local/api/v1/repos/${repo}/pulls/${index}

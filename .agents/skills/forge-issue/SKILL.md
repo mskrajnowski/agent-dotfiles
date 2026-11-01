@@ -1,6 +1,6 @@
 ---
 name: forge-issue
-description: Work with issues on the user's forge — create, list, fetch and add comments, review event timelines. Use when the user asks to create an issue, look up issue comments, or comment on an issue.
+description: Work with issues on the user's forge — create, list, update, fetch and add comments, get summaries with timelines. Use when the user asks to create an issue, look up issue comments, comment on an issue, or update an issue.
 ---
 
 # Working with issues
@@ -41,6 +41,14 @@ scripts/add_issue_comment.sh <owner>/<repo> <index> <text|->
 
 Reads the comment from stdin if `-` is passed. Prints the new comment's id.
 
+### Update an issue
+
+```bash
+scripts/update_issue.sh <owner>/<repo> <index> [--title <text>] [--body <text|->]
+```
+
+`--body -` reads the body from stdin. Title and body only — state changes (close/reopen) are the user's action.
+
 ### Get issue summary
 
 ```bash
@@ -52,6 +60,7 @@ One-call summary: state, title, labels, the issue description, and a compact eve
 ## Conventions
 
 - Issue comments are written for human readers — plain markdown, no raw JSON.
+- Agents never edit or delete comments — post a new comment instead, so the discussion history stays traceable.
 - Agents never close or reopen issues, or manage labels — those are the user's actions on the forge UI. Reference issues from PR descriptions (`Closes #N`) so they auto-close on merge (see `forge-pr`).
 
 ## Harness notes

@@ -102,6 +102,7 @@ Agents never merge PRs. After the PR is opened and review feedback is addressed,
 - PR titles use Conventional Commits (per the repo's commit rules).
 - Reference the issues a PR resolves in its description (`Closes #N`, `Fixes #N`) — forgejo auto-closes them when the user merges.
 - After amending and force-pushing, reply to each addressed review comment with the short commit SHA, and re-request review.
+- Agents never edit or delete comments — post a new comment instead, so the discussion history stays traceable.
 - Agents never merge PRs, close/reopen PRs, resolve review comments, or manage labels — those are the user's actions on the forge UI. Reply with the commit that addressed the feedback instead; the user resolves it.
 
 ## Harness notes
