@@ -44,6 +44,13 @@ These instructions apply to all projects unless overridden by project rules or t
 - Get explicit approval before architectural changes, and before changing public APIs, schemas, config formats, infrastructure, or dependencies.
 - When finished, briefly summarize what changed and how it was verified.
 
+### Stay focused on the task
+
+- Work only on the task at hand. Do not fix unrelated problems you spot along the way, even if they look like clear improvements.
+- If an unrelated problem blocks the task, stop and tell the developer; they decide whether to fix it on this branch, in a separate branch/PR, or to work around it.
+- If it is not a blocker, tell the developer and file an issue to track it, then get back to the original task.
+- Keep each branch and PR focused on a single goal, so they stay reviewable.
+
 ### Ask instead of guessing
 
 - Never guess what the developer meant. If requirements are ambiguous or incomplete, ask.
