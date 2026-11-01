@@ -22,27 +22,42 @@ These instructions apply to all projects unless overridden by project rules or t
 - Use the project's documented commands; do not invent them.
 - Run focused tests first, then the full suite; include type checks and builds where configured.
 - Do not bypass hooks or disable checks without approval.
-- Report what ran and the result. If something could not run, say so and state the risk.
+- Report what ran and the result; if something could not run, say so and state the risk. When finished, briefly summarize what changed and how it was verified.
 - Prefer integration tests that exercise user input and requests. Add unit tests only for complex logic that integration tests cannot cover conveniently.
 - Reproduce bugs first and debug to root cause; do not mask symptoms or silence errors.
 - Add a regression test for each fix when practical.
 
 ## Reasoning and workflow
 
-- Do not guess the developer's intent. Ask when requirements are ambiguous and state assumptions or uncertainty explicitly.
-- Verify current information with web search or fetch instead of relying on memory.
-- Before editing, read project docs and conventions and check git status and the diff. Understand the code, its call sites, and its libraries' documentation; plan before implementing.
-- Break complex work into small, testable tasks.
-- Get approval before architectural changes. Propose alternatives and ask explicitly before changing public APIs, schemas, config formats, infrastructure, or dependencies.
-- Cite sources so the developer can verify and learn, including for non-obvious technical claims, e.g. docs, papers, or design-pattern articles.
+### Research first
+
+- Start every non-trivial task with a research phase, not with code changes.
+- Do not act from memory of how a library, API, or tool works. Use web search and fetch to check current documentation, changelogs, and version-specific behavior — APIs and defaults change, and your training data may be stale. When you cannot find the docs, say so instead of guessing.
+- Before proposing changes, understand the current code: read the relevant files, check git status and the diff, find call sites, and read the project's docs and conventions.
+- Cite sources for non-obvious technical claims (docs, papers, design articles) so the developer can verify them.
 - Use the available tools and skills.
-- When finished, briefly summarize what changed and how it was verified.
 
-## Scope and safety
+### Brainstorm before implementing
 
-- Change only what was requested. Avoid drive-by refactors, renames, formatting churn, and dependency upgrades.
-- Report anything you noticed but deliberately did not change.
+- For anything beyond a trivial, mechanical fix: form a plan, state your understanding of the problem, and confirm the approach with the developer before implementing.
+- When multiple approaches exist, present them with trade-offs and ask the developer to choose. Do not pick one silently.
+- Break complex work into small, testable tasks.
+- Get explicit approval before architectural changes, and before changing public APIs, schemas, config formats, infrastructure, or dependencies.
+
+### Stay focused on the task
+
+- Work only on the task at hand; change only what was requested. Do not fix unrelated problems you spot along the way, even if they look like clear improvements.
+- Avoid drive-by refactors, renames, formatting churn, and dependency upgrades.
+- If an unrelated problem blocks the task, stop and tell the developer; they decide whether to fix it on this branch, in a separate branch/PR, or to work around it.
+- If it is not a blocker, tell the developer and file an issue to track it, then get back to the original task.
+- Keep each branch and PR focused on a single goal, so they stay reviewable.
 - Ask before irreversible actions: deleting data, running migrations, rewriting history, force pushing, changing credentials, or running production commands.
+
+### Ask instead of guessing
+
+- Never guess what the developer meant. If requirements are ambiguous or incomplete, ask.
+- State assumptions and uncertainty explicitly; prefer one clarifying question over a wrong implementation.
+- If you hit a blocker, unexpected behavior, or something that doesn't match your understanding, stop and report it to the developer with what you observed — they may know the cause. Do not silently work around problems.
 
 ## Security and dependencies
 
