@@ -13,15 +13,7 @@ import contextlib
 import re
 import sys
 
-try:
-    import requests
-except ModuleNotFoundError:
-    # uv inline-dependency script: bare `python` skips uv's dependency resolution.
-    sys.exit(
-        "ERROR: missing 'requests' — run this as a uv script: "
-        "./scripts/<name>.py or `uv run --script scripts/<name>.py`, "
-        "not with bare python."
-    )
+import requests
 
 FORGE_URL = "http://forge.local"
 BASE = FORGE_URL + "/api/v1"
