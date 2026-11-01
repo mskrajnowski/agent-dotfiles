@@ -22,7 +22,7 @@ for review_id in $(jq -r '.[].id' "$tmp"); do
   code=$(curl --netrc -s -o "$tmp2" -w "%{http_code}" "${base}/reviews/${review_id}/comments")
   [[ $code == 200 ]] || { echo "WARN: HTTP $code fetching review ${review_id} comments" >&2; continue; }
   jq -r --arg rid "$review_id" '.[] |
-    "COMMENT \($rid)-\(.id) resolved=\(.resolved // false) \(.path // ""):\(.line // .original_line // "?") by \(.poster.login)",
+    "COMMENT \($rid)-\(.id) resolved=\(.resolver != null) \(.path // ""):\(.position // .line // .original_line // "?") by \(.user.login)",
     (.body | split("\n")[:3] | "  " + join("\n  ")),
     "---"' "$tmp2"
 done
