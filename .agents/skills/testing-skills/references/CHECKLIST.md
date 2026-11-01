@@ -37,9 +37,9 @@ Load this file when running a full verification pass on a skill. Record pass/fai
 
 ## E. Packaging
 
-- [ ] Skill committed in the right location (project repo or dotfiles repo, per the writing-skills workflow)
-- [ ] User skills: stowed into `$HOME` and discoverable there
+- [ ] Skill committed in the project repo's `.agents/skills/`
+- [ ] Dotfiles repo: skill stowed into `$HOME` and discoverable there
 - [ ] Commit on a topic branch with a conventional commit message
-- [ ] PR opened where applicable
+- [ ] PR opened on the project's forge
 
 **Result:** PASS / FAIL — notes:

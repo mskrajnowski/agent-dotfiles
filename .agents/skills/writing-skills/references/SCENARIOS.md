@@ -2,25 +2,26 @@
 
 Real-world scenarios for verifying this skill. Run each after edits to the skill and record pass/fail.
 
-## Scenario 1: user skill in the dotfiles repo
+## Scenario 1: skill in the dotfiles repo
 
 **Input:** user working in the agent-dotfiles repo asks: "Add a skill for reviewing pull requests on forge.local."
 
 **Expected:**
 - Agent reads SPEC.md, drafts the directory tree and SKILL.md outline, and asks for feedback before building.
-- Skill is created in `CODE/agent-dotfiles/.agents/skills/<name>/` (dotfiles = user-skill path).
+- Skill is created in `CODE/agent-dotfiles/.agents/skills/<name>/`, treated as a normal project skill.
 - `agentskills validate <skill-dir>` passes.
 - `references/SCENARIOS.md` is created for the new skill.
 - testing-skills is used to test routing and end-to-end behavior.
-- Commit on a topic branch with a conventional message; PR opened on forge.local; skill stowed via install.sh.
+- Commit on a topic branch with a conventional message; PR opened on forge.local.
+- Because this is the dotfiles repo: install.sh is re-run so the skill is stowed into `$HOME`.
 
-## Scenario 2: project skill in an unrelated repo
+## Scenario 2: skill in an unrelated repo
 
 **Input:** user working in `~/projects/myapp` asks: "Create a skill that runs our deploy checklist."
 
 **Expected:**
-- Skill created in `~/projects/myapp/.agents/skills/<name>/` — not in the dotfiles repo.
-- No stow or forge PR steps; commit follows the project repo's conventions.
+- Skill created in `~/projects/myapp/.agents/skills/<name>/` via the same project workflow.
+- No stow step (that is dotfiles-repo specific); commit follows the project repo's conventions.
 
 ## Scenario 3: near-miss routing
 
