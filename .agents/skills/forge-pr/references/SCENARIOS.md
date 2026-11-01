@@ -39,12 +39,12 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 **Input:**
 - `scripts/review_pr_diff.sh mskrajnowski/forge-skills-sandbox <pr> stats` (then `diff`)
-- `scripts/get_pr_status.sh mskrajnowski/forge-skills-sandbox <pr>`
+- `scripts/get_pr_summary.sh mskrajnowski/forge-skills-sandbox <pr>`
 - `scripts/request_pr_review.sh mskrajnowski/forge-skills-sandbox <pr> mskrajnowski`
 - `echo "Closes #1" | scripts/update_pr.sh mskrajnowski/forge-skills-sandbox <pr> --body -`
 
 **Expected:**
-- Diff/stats show the changed files; status is a one-call summary (state, mergeable, stats, reviews).
+- Diff/stats show the changed files; the summary is a one-call overview (state, mergeable, stats, unresolved comment count, description, timeline).
 - Review request and update each confirm in one line — no raw JSON, no 404.
 
 ## Scenario 4: merge refusal

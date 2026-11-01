@@ -20,11 +20,11 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 **Expected:** new comment id printed; `review_issue_comments.sh` shows the comment with author and truncated body.
 
-## Scenario 3b: issue timeline (live)
+## Scenario 3b: issue summary (live)
 
-**Input:** `scripts/review_issue_timeline.sh mskrajnowski/forge-skills-sandbox <issue>`
+**Input:** `scripts/get_issue_summary.sh mskrajnowski/forge-skills-sandbox <issue>`
 
-**Expected:** chronological event lines (comments, state changes), not just comments — no raw JSON.
+**Expected:** state, title, labels, description, and chronological event lines (comments, state changes) — no raw JSON.
 
 ## Scenario 4: PR routing boundary
 

@@ -41,13 +41,13 @@ scripts/add_issue_comment.sh <owner>/<repo> <index> <text|->
 
 Reads the comment from stdin if `-` is passed. Prints the new comment's id.
 
-### Review issue timeline
+### Get issue summary
 
 ```bash
-scripts/review_issue_timeline.sh <owner>/<repo> <index>
+scripts/get_issue_summary.sh <owner>/<repo> <index>
 ```
 
-Prints the full event history (comments, state changes, label events) chronologically — use when comments alone don't tell the whole story.
+One-call summary: state, title, labels, the issue description, and a compact event timeline (comments, state changes, label events). Use to catch up on an issue without reading every comment; fetch full comments with `review_issue_comments.sh` when needed.
 
 ## Conventions
 
