@@ -1,6 +1,6 @@
 ---
 name: writing-skills
-description: Author new Agent Skills in a repository's .agents/skills directory. Use when the user asks to create or add a skill, write SKILL.md, or extend the agent's capabilities with a new skill.
+description: Author new Agent Skills. Use when the user asks to create or add a skill, write SKILL.md, or extend the agent's capabilities with a new skill.
 ---
 
 # Writing skills
@@ -19,7 +19,7 @@ Do **not** write a skill for one-off tasks, or for behavior that belongs in `AGE
 ## Workflow
 
 1. **Design first.** Draft the directory tree and describe what `SKILL.md` will contain. Get user feedback before building.
-2. **Location.** Skills live in the current project's repo at `.agents/skills/<name>/`, committed and shared with the project's collaborators. If the skill is meant to be user/global (available across projects), add it to the user's dotfiles repo (`agent-dotfiles`) instead and follow that repo's instructions.
+2. **Location.** Skills live in the current project's repo at `.agents/skills/<name>/`, committed and shared with the project's collaborators. Global skills (available across projects) go to the user's dotfiles repo (`agent-dotfiles`) instead, per that repo's instructions.
 3. **Write `SKILL.md`.** Follow the spec (see SPEC.md). Keep it under 500 lines. The `description` must state *what it does* and *when to use it*, with concrete trigger keywords — this is the only routing signal.
 4. **Progressive disclosure.** Move detail out of `SKILL.md` into `references/` (loaded on demand) or `scripts/`. Keep references one level deep from `SKILL.md`.
 5. **Write regression scenarios.** Record the real-world test scenarios for the skill (inputs, steps, expected results) in `references/SCENARIOS.md`, so future edits can be verified against the same use cases.

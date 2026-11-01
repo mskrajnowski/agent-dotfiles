@@ -42,6 +42,6 @@ Harness-specific behavior goes in short sections like this one, not in the gener
 
 ### Pi
 
-- Place the skill where pi discovers it (`~/.agents/skills/` for user skills) before testing routing; run `/reload` after any edit.
+- Place the skill where pi discovers it (project `.agents/skills/`, or the dotfiles repo for global skills) before testing routing; run `/reload` after any edit.
 - Run `/skill:<name>` to confirm the skill is discoverable.
 - Routing can be tested in-session by launching a subagent with the trigger prompt (use the default model) and inspecting whether it loaded the skill.
