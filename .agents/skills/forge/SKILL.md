@@ -12,6 +12,7 @@ The user's forge is a local Forgejo instance at `http://forge.local`. It is the 
 - **API base:** `http://forge.local/api/v1`
 - **Auth:** `curl --netrc` — `~/.netrc` holds credentials for both the API and git push/pull. Never print the credentials.
 - **Agent identity:** `GET /api/v1/user` returns the account the agent authenticates as — it may differ per agent and from the user's own account. Check it when it matters who authored a comment or review.
+- **Running the scripts:** the `forge-pr`/`forge-issue` scripts are uv inline-dependency scripts — run them directly (`./scripts/foo.py`) or via `uv run --script scripts/foo.py`; never with bare `python`/`python3`, which skips uv's dependency resolution and fails with `ModuleNotFoundError`.
 - **Output discipline:** never dump raw JSON into context. Write responses to a file and summarize, filter with `jq`, or use the dedicated scripts in `forge-pr` and `forge-issue` (they do this for you).
 - **User actions:** the user merges PRs, closes/reopens PRs and issues, resolves review comments, and manages labels — the forge UI is theirs, and some of these (e.g. resolving review comments) have no API endpoint. Agents point to fixes by replying with short commit SHAs instead.
 - **Reply quotes:** when replying outside a thread (PR-level/issue comments, or free-standing review comments), quote the original in forgejo's own format — `@<author> wrote in <permalink>:`, blank line, blockquoted original, blank line, reply text. The header is NOT part of the blockquote, and the blank lines are required or the reply renders as part of the quote. Threaded replies to diff comments get the original shown above in the UI, so don't quote those.
@@ -23,6 +24,7 @@ The user's forge is a local Forgejo instance at `http://forge.local`. It is the 
 New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
 
 - Python 3.12+ uv scripts (PEP 723): `#!/usr/bin/env -S uv run --script` shebang and an inline `dependencies = ["requests"]` header, so uv provisions dependencies on first run.
+- Guard the `import requests` with a `try/except ModuleNotFoundError` that exits with a one-line hint to run the script via uv, so a bare-`python` invocation fails with clear instructions instead of a confusing traceback (see the existing scripts).
 - Use `requests` directly — there is deliberately no shared client module. Each script defines its own `FORGE_URL`/`BASE`/`TIMEOUT` constants, creates a `requests.Session()` (auth is picked up from `~/.netrc` automatically — never set an explicit `auth=` or Authorization header, that would override netrc), and passes `timeout=TIMEOUT` on every call.
 - Each caller parses its own response: `.json()` when the endpoint returns JSON, `.text` for plain-text endpoints (e.g. the `.diff` URL). Never dump raw JSON to stdout.
 - Each script carries its own tiny `fail(resp, context)` helper that prints `ERROR: HTTP <code>[ (<context>)]` plus the API's `.message` to stderr and exits 1 — keep the error contract identical across scripts.

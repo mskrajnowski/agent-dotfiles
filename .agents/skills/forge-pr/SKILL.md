@@ -5,7 +5,7 @@ description: Work with pull requests on the user's forge — open, list, review 
 
 # Working with pull requests
 
-Scripts live in this skill's directory; run them with the skill dir as cwd or via relative path. All scripts use `curl --netrc` against `http://forge.local/api/v1` (see the `forge` skill for shared conventions). Each script prints only an agent-friendly summary — never raw JSON.
+Scripts live in this skill's directory; run them with the skill dir as cwd or via relative path. They are [uv inline-dependency scripts](https://docs.astral.sh/uv/guides/scripts/) — run them directly (`./scripts/foo.py`) or via `uv run --script scripts/foo.py`; **never** with a bare `python`/`python3` invocation, which skips uv's dependency resolution and fails with `ModuleNotFoundError`. All scripts use `curl --netrc` against `http://forge.local/api/v1` (see the `forge` skill for shared conventions). Each script prints only an agent-friendly summary — never raw JSON.
 
 ## Workflows
 
