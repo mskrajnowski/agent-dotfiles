@@ -7,6 +7,7 @@ description: Work with issues on the user's forge — create, list, update, fetc
 
 Scripts live in this skill's directory; run them via relative path. They are [uv inline-dependency scripts](https://docs.astral.sh/uv/guides/scripts/) — run them directly (`./scripts/foo.py`) or via `uv run --script scripts/foo.py`; **never** with a bare `python`/`python3` invocation, which skips uv's dependency resolution and fails with `ModuleNotFoundError`. All scripts use `curl --netrc` against `http://forge.local/api/v1` (see the `forge` skill for shared conventions). Each script prints only an agent-friendly summary — never raw JSON.
 
+**The `-` convention:** a trailing `[body|-]`/`<text|->` argument is *only* the last, optional text argument — `-` there reads that text from stdin. All other positional arguments must be given literally on the command line; `-` is never a placeholder for them.
 ## Workflows
 
 ### Create an issue
@@ -16,6 +17,13 @@ scripts/open_issue.py <owner>/<repo> <title> [body|-]
 ```
 
 - `body` optional; reads stdin if `-` is passed. Returns the issue number and URL.
+
+```bash
+# title is a literal argument; only the body comes from stdin via '-'
+scripts/open_issue.py owner/repo "Title here" - <<'HEREDOC'
+Body text on stdin
+HEREDOC
+```
 
 ### List issues
 
@@ -41,6 +49,12 @@ scripts/add_issue_comment.py <owner>/<repo> <index> <text|->
 
 Reads the comment from stdin if `-` is passed. Prints the new comment's id.
 
+```bash
+scripts/add_issue_comment.py owner/repo 12 - <<'HEREDOC'
+Comment text on stdin
+HEREDOC
+```
+
 ### Update an issue
 
 ```bash
@@ -48,6 +62,12 @@ scripts/update_issue.py <owner>/<repo> <index> [--title <text>] [--body <text|->
 ```
 
 `--body -` reads the body from stdin. Title and body only — state changes (close/reopen) are the user's action.
+
+```bash
+scripts/update_issue.py owner/repo 12 --body - <<'HEREDOC'
+New body on stdin
+HEREDOC
+```
 
 ### Get issue summary
 
