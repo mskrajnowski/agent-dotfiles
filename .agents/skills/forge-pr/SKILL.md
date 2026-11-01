@@ -75,7 +75,7 @@ Use before opening a PR to double-check its contents, and when reviewing what a 
 scripts/get_pr_status.sh <owner>/<repo> <index>
 ```
 
-One-call summary: state, mergeability, head→base, change stats, review comment count, requested reviewers, and review states. Use to check a PR's situation without dumping JSON.
+One-call summary: state, mergeability, head→base, change stats, unresolved review comment count, requested reviewers, and review states. Use to check a PR's situation without dumping JSON.
 
 ### Request review
 
