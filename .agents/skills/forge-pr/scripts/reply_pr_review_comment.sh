@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Reply to a review comment by posting a quoted reply as a PR comment.
-# (This forge's API has no threaded reply for review comments, so replies
-# quote the original for context.)
+# Reply to a review comment by posting a review comment in the same review
+# at the same path:line — the forge UI groups those into one thread.
+# (The API has no explicit in_reply_to; thread membership is by path+position.)
 # Usage: reply_pr_review_comment.sh <owner>/<repo> <pr-index> <review-id> <comment-id> <text|->
 #   text "-" reads the reply body from stdin.
-# Prints: new comment id on success.
+# Prints: reply comment id on success.
 set -euo pipefail
 
 repo=${1:?usage: reply_pr_review_comment.sh <owner>/<repo> <pr-index> <review-id> <comment-id> <text|->}
@@ -24,24 +24,24 @@ code=$(curl --netrc -s -o "$tmp" -w "%{http_code}" "$base")
 orig=$(jq -r --argjson id "$cid" 'map(select(.id == $id)) | .[0] // empty' "$tmp")
 [[ -n $orig ]] || { echo "ERROR: comment $cid not found in review $review" >&2; exit 1; }
 
-author=$(jq -r '.user.login' <<<"$orig")
-path=$(jq -r '.path // "general"' <<<"$orig")
-line=$(jq -r '.position // .line // .original_line // "?"' <<<"$orig")
-body=$(jq -r '.body' <<<"$orig")
+path=$(jq -r '.path // empty' <<<"$orig")
+pos=$(jq -r '.position // 0' <<<"$orig")
+if [[ -z $path ]]; then
+  echo "ERROR: comment $cid is a free-standing comment (no path) — use add_pr_comment.sh instead" >&2
+  exit 1
+fi
 
 if [[ -z $text ]]; then echo "ERROR: missing reply text" >&2; exit 1; fi
 if [[ $text == - ]]; then text=$(cat); fi
 
-quoted=$(printf '> In reply to @%s (comment %s, `%s:%s`):\n> %s' \
-  "$author" "$cid" "$path" "$line" "$(echo "$body" | sed 's/^/> /')" "$text")
-
 code=$(curl --netrc -s -o "$tmp2" -w "%{http_code}" \
-  -X POST "http://forge.local/api/v1/repos/${repo}/issues/${index}/comments" \
+  -X POST "$base" \
   -H 'Content-Type: application/json' \
-  -d "$(jq -n --arg b "$quoted" '{body: $b}')")
+  -d "$(jq -n --arg b "$text" --arg p "$path" --arg l "$pos" \
+        '{body: $b, path: $p, new_position: ($l|tonumber)}')")
 
-if [[ $code == 201 ]]; then
-  jq -r '"Reply posted as comment \(.id)"' "$tmp2"
+if [[ $code == 200 || $code == 201 ]]; then
+  jq -r '"Reply \(.id) posted in thread on \(.path // ""):\(.position // .line // "?")"' "$tmp2"
 else
   echo "ERROR: HTTP $code" >&2
   jq -r '.message // empty' "$tmp2" >&2

@@ -56,7 +56,7 @@ Marks a specific place in the diff — use to flag spots needing the user's feed
 scripts/reply_pr_review_comment.sh <owner>/<repo> <index> <review-id> <comment-id> <text|->
 ```
 
-Posts a quoted reply (original author, file:line, and body) as a PR comment — the forge API has no threaded replies for review comments. The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`).
+Posts a review comment in the same review at the same path:line, which the forge UI groups into the original thread (the API has no explicit `in_reply_to`; thread membership is by review + path + position). After addressing feedback, reply with a short commit SHA — the forge renders bare SHAs as clickable commit links. The comment ids come from `review_pr_comments.sh` output (`COMMENT <review-id>-<id>`).
 
 ### Merging
 
