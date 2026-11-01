@@ -23,6 +23,9 @@ scripts/open_issue.py <owner>/<repo> <title>
 scripts/open_issue.py owner/repo "Title here" <<'HEREDOC'
 Body text on stdin
 HEREDOC
+
+# no body: leave stdin empty, e.g.
+scripts/open_issue.py owner/repo "Title here" </dev/null
 ```
 
 ### List issues

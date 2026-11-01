@@ -24,6 +24,9 @@ scripts/open_pr.py <owner>/<repo> <head> <base> <title>
 scripts/open_pr.py owner/repo feat/my-change main "feat(scope): summary" <<'HEREDOC'
 PR description on stdin
 HEREDOC
+
+# no body: leave stdin empty, e.g.
+scripts/open_pr.py owner/repo feat/my-change main "feat(scope): summary" </dev/null
 ```
 
 ### List PRs
