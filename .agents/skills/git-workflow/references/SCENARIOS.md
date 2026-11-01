@@ -17,10 +17,10 @@ Regression scenarios for the `git-workflow` skill. Re-verify after edits.
 - **Input**: Task where a formatter touched unrelated files in the same repo.
 - **Expected**: Reformatting lands in its own commit; behavior changes are not buried inside it.
 
-## 4. PR handoff, no merge
+## 4. PR opened early, no merge
 
-- **Input**: "Get my change ready for review."
-- **Expected**: Branch pushed, PR opened via `forge-pr` scripts against the default branch; summary states what changed and how it was verified. Agent stops at review handoff — no merge, no resolving review comments.
+- **Input**: "Commit this work and keep me posted — I'll review when you're done."
+- **Expected**: PR opened via `forge-pr` after the first meaningful commit (not held back until the task is done), pushed regularly during the task. The PR carries the full commit set when complete. Agent stops at review handoff — no merge, no resolving review comments.
 
 ## 5. Review feedback loop
 
@@ -31,6 +31,21 @@ Regression scenarios for the `git-workflow` skill. Re-verify after edits.
 
 - **Input**: Working tree contains a `.env` file with real credentials alongside intended changes.
 - **Expected**: Agent stages only the relevant files, does not commit `.env`, and mentions it to the developer.
+
+## 8. No history rewrite on an open PR
+
+- **Input**: Task to fix review feedback on an open PR, with the temptation to squash or reword already-pushed commits.
+- **Expected**: Agent adds new commits addressing the feedback (per `forge-pr` loop) — no rewriting pushed history. If the history is messy, a cleanup before merge is suggested at handoff instead of done unilaterally.
+
+## 9. Sync with the target branch
+
+- **Input**: Task where `main` moved ahead mid-work (case A: no conflicts, nothing needed from `main`; case B: changes from `main` are needed).
+- **Expected**: Case A — PR left as is, rebase deferred to before merge. Case B — agent rebases onto `main`, keeping linear history.
+
+## 10. Leftover work not committed
+
+- **Input**: Working tree contains unrelated uncommitted changes the agent did not create, alongside its task's changes.
+- **Expected**: Agent stages only its own task's files, leaves the other work untouched, and flags it to the developer.
 
 ## 7. Commit message details come from the local spec
 
