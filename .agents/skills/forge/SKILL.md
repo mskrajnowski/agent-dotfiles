@@ -5,16 +5,17 @@ description: General knowledge about the user's forge — a local Forgejo instan
 
 # Forge
 
-The user's forge is a local Forgejo instance at `http://forge.local` (version `17.0.1+gitea-1.22.0`; check `GET /api/v1/version` for the current value). It is the user's primary collaboration service with agents.
+The user's forge is a local Forgejo instance at `http://forge.local`. It is the user's primary collaboration service with agents.
 
 ## Shared conventions (apply to every forge interaction)
 
 - **API base:** `http://forge.local/api/v1`
-- **Auth:** `curl --netrc` — `~/.netrc` holds credentials for both the API and git push/pull. Never print the credentials. The agent authenticates as the `setup` user — comments and reviews it posts appear "by setup", not by the repo owner (`mskrajnowski`).
+- **Auth:** `curl --netrc` — `~/.netrc` holds credentials for both the API and git push/pull. Never print the credentials.
+- **Agent identity:** `GET /api/v1/user` returns the account the agent authenticates as — it may differ per agent and from the user's own account. Check it when it matters who authored a comment or review.
 - **Output discipline:** never dump raw JSON into context. Write responses to a file and summarize, filter with `jq`, or use the dedicated scripts in `forge-pr` and `forge-issue` (they do this for you).
 - **Discover endpoints:** the full OpenAPI schema is at `http://forge.local/swagger.v1.json` — fetch it and search for the operation you need rather than guessing.
 - **User actions:** the user merges PRs, closes/reopens PRs and issues, resolves review comments, and manages labels — the forge UI is theirs, and some of these (e.g. resolving review comments) have no API endpoint. Agents point to fixes by replying with short commit SHAs instead.
-- **Sandbox:** test scripts and skills against `mskrajnowski/forge-skills-sandbox` — never against real repos. Create throwaway PRs/issues/branches there and leave the user to clean them up.
+- **Sandbox:** a `forge-skills-sandbox` repo exists under the user's account for testing scripts and skills (find it with `GET /repos/search?q=forge-skills-sandbox`) — never test against real repos. Create throwaway PRs/issues/branches there and leave the user to clean them up.
 
 ## Writing forge scripts
 
@@ -25,9 +26,9 @@ New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
 - On success print a one-line confirmation (with ids, path:line, or short SHA). On failure print `ERROR: HTTP <code>` plus the response's `.message` to stderr and `exit 1`.
 - Keep output for agent eyes: truncate comment bodies and timelines; never emit raw JSON.
 
-## Forgejo 17 API notes
+## Forgejo API notes
 
-Hard-won quirks of this API version — trust these over assumptions when writing new scripts:
+Hard-won quirks of the current API — trust these over assumptions when writing new scripts, but verify against the live instance (`GET /api/v1/version` reports the running version) if something misbehaves:
 
 - **PRs are issues:** issue endpoints work with PR indexes — `GET/POST /issues/{index}/comments`, `GET /issues/{index}/timeline`, and issue state changes all apply to PRs.
 - **Review comment fields differ from issue comments:** author is `.user.login` (`.poster.login` is used by issue comments), line is `.position`, and "resolved" is derived from `.resolver != null` — there is no `.resolved` boolean.

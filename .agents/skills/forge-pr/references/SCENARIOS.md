@@ -2,9 +2,11 @@
 
 Real-world scenarios for verifying this skill. Run each after edits to the skill and record pass/fail.
 
+Resolve `<user>` by searching for the sandbox repo: `GET /repos/search?q=forge-skills-sandbox` — it is `forge-skills-sandbox` under the user's account (see the `forge` skill).
+
 ## Scenario 1: open a PR (live)
 
-**Input:** `scripts/open_pr.sh mskrajnowski/forge-skills-sandbox test/skill-demo main "test: skill demo"`
+**Input:** `scripts/open_pr.sh <user>/forge-skills-sandbox test/skill-demo main "test: skill demo"`
 
 **Expected:**
 - Output is exactly `PR #<n> opened: http://forge.local/...` — no raw JSON.
@@ -12,7 +14,7 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 2: fetch review comments (live, sandbox PR with reviews)
 
-**Input:** `scripts/review_pr_comments.sh mskrajnowski/forge-skills-sandbox 1`
+**Input:** `scripts/review_pr_comments.sh <user>/forge-skills-sandbox 1`
 
 **Expected:**
 - Review states printed, comments flattened with `resolved=` status, `path:line`, author, and truncated bodies. No raw JSON dump.
@@ -20,16 +22,16 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 ## Scenario 3: list PRs
 
-**Input:** `scripts/list_prs.sh mskrajnowski/forge-skills-sandbox` and `... all`
+**Input:** `scripts/list_prs.sh <user>/forge-skills-sandbox` and `... all`
 
 **Expected:** `#index [state] title (head->base)` lines; open by default, all includes merged/closed.
 
 ## Scenario 3b: add comment + reply to review comment (live)
 
 **Input:**
-- `scripts/add_pr_comment.sh mskrajnowski/forge-skills-sandbox <pr> "Addressed in commit abc1234"`
-- `scripts/reply_pr_review_comment.sh mskrajnowski/forge-skills-sandbox <pr> <review-id> <comment-id> "Fixed by …"`
-- `scripts/add_pr_review_comment.sh mskrajnowski/forge-skills-sandbox <pr> <path> <line> "Question: …"`
+- `scripts/add_pr_comment.sh <user>/forge-skills-sandbox <pr> "Addressed in commit abc1234"`
+- `scripts/reply_pr_review_comment.sh <user>/forge-skills-sandbox <pr> <review-id> <comment-id> "Fixed by …"`
+- `scripts/add_pr_review_comment.sh <user>/forge-skills-sandbox <pr> <path> <line> "Question: …"`
 
 **Expected:**
 - Each script prints a confirmation id (comment id / review id) — no raw JSON, no `null` fields.
@@ -38,10 +40,10 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 ## Scenario 3c: diff, status, review request, update (live)
 
 **Input:**
-- `scripts/review_pr_diff.sh mskrajnowski/forge-skills-sandbox <pr> stats` (then `diff`)
-- `scripts/get_pr_summary.sh mskrajnowski/forge-skills-sandbox <pr>`
-- `scripts/request_pr_review.sh mskrajnowski/forge-skills-sandbox <pr> mskrajnowski`
-- `echo "Closes #1" | scripts/update_pr.sh mskrajnowski/forge-skills-sandbox <pr> --body -`
+- `scripts/review_pr_diff.sh <user>/forge-skills-sandbox <pr> stats` (then `diff`)
+- `scripts/get_pr_summary.sh <user>/forge-skills-sandbox <pr>`
+- `scripts/request_pr_review.sh <user>/forge-skills-sandbox <pr> mskrajnowski`
+- `echo "Closes #1" | scripts/update_pr.sh <user>/forge-skills-sandbox <pr> --body -`
 
 **Expected:**
 - Diff/stats show the changed files; the summary is a one-call overview (state, mergeable, stats, unresolved comment count, description, timeline).
