@@ -1,4 +1,6 @@
 ^/install\.sh
+^/AGENTS.md
+^/\.pi/npm
 
 # Stow defaults:
 # Comments and blank lines are allowed.
@@ -22,6 +24,5 @@ _darcs
 \#.*\#       # emacs autosave files
 
 ^/README.*
-^/\.pi/npm
 ^/LICENSE.*
 ^/COPYING
