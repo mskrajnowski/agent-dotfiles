@@ -4,11 +4,7 @@ These instructions apply to all projects unless overridden by project rules or t
 
 ## Commits
 
-- Create a topic branch first so the developer can review and pull it.
-- Make atomic, single-responsibility commits. Split unrelated changes into separate commits.
-- Keep diffs small and reviewable; stage only files relevant to the commit. Do not mix formatting changes with behavior changes.
-- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
-- Keep commit messages brief and specific. Add detail only when it helps; no essays.
+Always follow the `git-workflow` skill: topic branch first (never commit to the default branch), commit per logical change, then open a PR for the developer to review and merge. See `.agents/skills/git-workflow/SKILL.md` for details.
 
 ## Code
 
