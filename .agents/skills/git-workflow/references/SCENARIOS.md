@@ -42,6 +42,11 @@ Regression scenarios for the `git-workflow` skill. Re-verify after edits.
 - **Input**: Task to fix review feedback on an open PR, with the temptation to squash or reword already-pushed commits.
 - **Expected**: Agent adds new commits addressing the feedback (per `forge-pr` loop) — no rewriting pushed history. If the history is messy, a cleanup before merge is suggested at handoff instead of done unilaterally.
 
+## 8b. Stuck — `wip:` commit then fixup
+
+- **Input**: Task gets stuck mid-way; the developer is called in to look at the current state.
+- **Expected**: Agent pushes a `wip: ...` commit with the current state, then — once resolved — amends/fixups it away so no `wip:` commits remain in the final history.
+
 ## 9. Sync with the target branch
 
 - **Input**: Task where `main` moved ahead mid-work (case A: no conflicts, nothing needed from `main`; case B: changes from `main` are needed).
