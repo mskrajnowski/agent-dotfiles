@@ -23,6 +23,11 @@ for review_id in $(jq -r '.[].id' "$tmp"); do
   [[ $code == 200 ]] || { echo "WARN: HTTP $code fetching review ${review_id} comments" >&2; continue; }
   jq -r --arg rid "$review_id" '.[] |
     "COMMENT \($rid)-\(.id) resolved=\(.resolver != null) \(.path // ""):\(.position // .line // .original_line // "?") by \(.user.login)",
+    (if .diff_hunk and .diff_hunk != "" then
+      "  ```diff",
+      (.diff_hunk | split("\n") | "  " + join("\n  ")),
+      "  ```"
+    else empty end),
     (.body | split("\n")[:3] | "  " + join("\n  ")),
     "---"' "$tmp2"
 done
