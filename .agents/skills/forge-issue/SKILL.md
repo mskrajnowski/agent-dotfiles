@@ -60,12 +60,7 @@ One-call summary: state, title, labels, the issue description, and a compact eve
 ## Conventions
 
 - Issue comments are written for human readers — plain markdown, no raw JSON.
+- Read the issue discussion with `review_issue_comments.sh` before acting on it — don't repeat what was already said.
+- For PR-related discussions, use `forge-pr` instead.
 - Agents never edit or delete comments — post a new comment instead, so the discussion history stays traceable.
 - Agents never close or reopen issues, or manage labels — those are the user's actions on the forge UI. Reference issues from PR descriptions (`Closes #N`) so they auto-close on merge (see `forge-pr`).
-
-## Harness notes
-
-### Pi
-
-- Use `review_issue_comments.sh` before acting on an issue — context discipline says read the discussion first.
-- For PR-related discussions, use `forge-pr` instead.
