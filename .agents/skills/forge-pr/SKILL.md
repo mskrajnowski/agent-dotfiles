@@ -1,6 +1,6 @@
 ---
 name: forge-pr
-description: Work with pull requests on the user's forge — open, list, fetch review comments, resolve review feedback, merge. Use when the user asks to open a PR, review PR comments, address review feedback, or merge a pull request.
+description: Work with pull requests on the user's forge — open, list, fetch review comments, resolve review feedback. Use when the user asks to open a PR, review PR comments, or address review feedback. Agents do not merge PRs; merging is the user's action.
 ---
 
 # Working with pull requests
@@ -34,13 +34,9 @@ scripts/pr_reviews.sh <owner>/<repo> <index>
 
 Prints each review's state and every comment (`id`, `path`, `line`, `author`, `body`), plus which comments are already resolved. This is the core loop for addressing feedback: read comments → fix code → commit → force-push (`--force-with-lease`) → resolve the comment when done.
 
-### Merge a PR
+### Merging
 
-```bash
-scripts/merge_pr.sh <owner>/<repo> <index> [method]   # method: merge|rebase|rebase-merge|squash, default merge
-```
-
-Verifies the PR is mergeable first; reports merge state on failure.
+Agents never merge PRs. After the PR is opened and review feedback is addressed, hand the decision to the user. If asked to merge, explain that merging is the user's action.
 
 ### Update a PR
 

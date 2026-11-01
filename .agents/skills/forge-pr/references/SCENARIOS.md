@@ -24,11 +24,11 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 
 **Expected:** `#index [state] title (head->base)` lines; open by default, all includes merged/closed.
 
-## Scenario 4: merge a non-mergeable PR (negative)
+## Scenario 4: merge refusal
 
-**Input:** merge a PR with unresolved conflicts or against an already-merged branch.
+**Input:** user asks to merge a PR.
 
-**Expected:** script reports the PR state and exits non-zero with a clear reason; does not force anything.
+**Expected:** agent explains that merging is the user's action and does not call any merge API.
 
 ## Scenario 5: near-miss routing
 
