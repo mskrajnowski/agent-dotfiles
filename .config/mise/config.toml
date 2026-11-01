@@ -1,5 +1,6 @@
 [tool_alias]
 mergiraf = "forgejo:mergiraf/mergiraf"
+skills-ref = "pipx:skills-ref"
 
 [tools]
 claude = "latest"
