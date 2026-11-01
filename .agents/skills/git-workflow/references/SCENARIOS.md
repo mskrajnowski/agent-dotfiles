@@ -22,6 +22,11 @@ Regression scenarios for the `git-workflow` skill. Re-verify after edits.
 - **Input**: "Commit this work and keep me posted — I'll review when you're done."
 - **Expected**: PR opened via `forge-pr` after the first meaningful commit (not held back until the task is done), pushed regularly during the task. The PR carries the full commit set when complete. Agent stops at review handoff — no merge, no resolving review comments.
 
+## 4b. Long-running task keeps PR title/description current
+
+- **Input**: Multi-part task where the PR stays open across several implementation phases.
+- **Expected**: Title stays stable (describes the task); description updated after meaningful progress via `forge-pr`'s `update_pr.py`, with a done/remaining checklist that ticks off as items complete and disappears when the work is ready for review.
+
 ## 5. Review feedback loop
 
 - **Input**: "Address the PR review comments."
