@@ -6,7 +6,7 @@
 #   original above the reply, so don't quote it.
 # - Free-standing comments (no file anchor): the reply is posted as a
 #   general PR comment quoting the original, since those get no thread UI.
-#   The quote uses forgejo's own reply format:
+#   The quote uses forgejo's own reply format (see forge/SKILL.md):
 #   @<author> wrote in <permalink>: / blank line / blockquoted body / blank
 #   line / reply text — the header must NOT be inside the blockquote.
 #

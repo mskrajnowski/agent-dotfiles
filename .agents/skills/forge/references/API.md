@@ -17,19 +17,6 @@ Hard-won quirks of the current API. The forge-pr/forge-issue scripts already enc
 - **Swagger can overstate the API:** `GET /pulls/{index}/requested_reviewers` is documented but returns 404; the `POST` variant works and returns `201` with an empty array.
 - **Timeline events** (`GET /issues/{index}/timeline?limit=50`) include `comment`, `close`, `pull_push`, `review`, `review_request`, and `change_title` events.
 
-## Markdown conventions
-
-- **Quoting a comment you reply to outside a thread** (PR-level/issue comments, or free-standing review comments): forgejo's own reply format is `@<author> wrote in <permalink>:`, then a blank line, then the original as a blockquote, then a blank line, then the reply — the header is NOT part of the blockquote, and the blank lines are required or the reply text renders as part of the quote. Threaded replies to diff comments get the original shown above in the UI, so don't quote those.
-
-## Script conventions
-
-New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
-
-- Self-contained bash; `set -euo pipefail`; `mktemp` files with a `trap ... EXIT` cleanup.
-- Build JSON payloads with `jq -n --arg ...`; never inline untrusted text into JSON strings.
-- On success print a one-line confirmation (with ids, path:line, or short SHA). On failure print `ERROR: HTTP <code>` plus the response's `.message` to stderr and `exit 1`.
-- Keep output for agent eyes: truncate comment bodies and timelines; never emit raw JSON.
-
 ## Discovery
 
 - The full OpenAPI schema is at `http://forge.local/swagger.v1.json` — fetch it and search for the operation you need rather than guessing.
