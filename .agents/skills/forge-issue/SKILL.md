@@ -1,6 +1,6 @@
 ---
 name: forge-issue
-description: Work with issues on the user&apos;s forge — create, list, update, fetch and add comments, get summaries with timelines. Use when the user asks to create an issue, look up issue comments, comment on an issue, or update an issue.
+description: Work with issues on the user's forge — create, list, update, fetch and add comments, get summaries with timelines. Use when the user asks to create an issue, look up issue comments, comment on an issue, or update an issue.
 ---
 
 # Working with issues
