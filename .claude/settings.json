@@ -1,5 +1,10 @@
 {
   "theme": "auto",
   "model": "sonnet",
-  "showThinkingSummaries": true
+  "showThinkingSummaries": true,
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  }
 }
