@@ -14,6 +14,14 @@ mkdir -p \
   ~/.config/mise \
   ~/.local/bin \
   ~/.pi/agent \
-  ~/.claude
+  ~/.claude \
+  ~/.claude/skills
 
 stow --dir "$dotfiles_dir" --target ~ --adopt .
+
+# claude writes synced claude.ai skills into ~/.claude/skills, so link each
+# skill in individually to keep that directory out of the repo
+for skill in "$dotfiles_dir"/.agents/skills/*/; do
+  name=$(basename "$skill")
+  ln -sfn "../../.agents/skills/$name" ~/.claude/skills/"$name"
+done
