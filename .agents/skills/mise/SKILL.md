@@ -132,7 +132,7 @@ cover something:
 | Lockfiles (`mise.lock`) | /dev-tools/mise-lock.html |
 | Shims vs activation vs exec | /dev-tools/shims.html |
 | Tool backends | /dev-tools/backends/ · registry: /registry.html |
-| Language guides (node, python, go, …) | /lang/ |
+| Language guides (node, python, go, …) | /lang/node.html, /lang/python.html, /lang/go.html, … |
 | Secrets & redaction | /environments/secrets/ |
 | Task args, ordering, caching, monorepo | /tasks/task-arguments.html · /tasks/architecture.html · /tasks/caching.html · /tasks/monorepo.html |
 | Shell setup (bash, zsh, fish, …) | /shell-setup.html |
