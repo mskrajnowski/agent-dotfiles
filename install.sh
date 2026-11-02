@@ -13,6 +13,6 @@ mkdir -p \
   ~/.config/jj/conf.d \
   ~/.config/mise \
   ~/.local/bin \
-  ~/.pi
+  ~/.pi/agent
 
 stow --dir "$dotfiles_dir" --target ~ --adopt .
