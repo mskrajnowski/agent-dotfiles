@@ -34,5 +34,6 @@ Recorded use cases to verify against when editing this skill.
 
 ## 5. Reference loading
 
-- references/tasks.md and references/tools.md are valid, loadable, and
-  consistent with SKILL.md (no contradicting commands).
+- All key commands and information live in SKILL.md; it links only to the
+  mise docs (https://mise.jdx.dev) for further research — no separate
+  reference summaries to keep in sync.

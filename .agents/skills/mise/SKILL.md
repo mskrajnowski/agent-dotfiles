@@ -6,9 +6,8 @@ description: Use mise (https://mise.jdx.dev/) to install dev tools, manage per-p
 # mise
 
 mise installs a project's tools, sets its environment variables, and runs its
-tasks from `mise.toml`. Check the installed version with `mise --version`; the
-CLI help (`mise <command> --help`) is authoritative and the docs at
-https://mise.jdx.dev cover the rest.
+tasks from `mise.toml`. Check the installed version with `mise --version`;
+the CLI help (`mise <command> --help`) is authoritative.
 
 ## Core model
 
@@ -17,8 +16,8 @@ https://mise.jdx.dev cover the rest.
    parents, and the global config; the closest file wins. `mise config ls`
    shows which files apply.
 2. A `[tools]` entry like `node = "24"` is a *request*, not a pin — mise
-   installs a matching version and reuses it. Pin with exact versions or
-   `mise lock`; see [tools reference](references/tools.md).
+   installs a matching version and reuses it. Pin with exact versions or a
+   committed `mise.lock` (`mise lock`) for reproducibility.
 3. Tools land on `PATH` via shell activation, shims, or by prefixing commands
    with `mise exec --`. Scripts and CI should use `mise exec` / `mise run`,
    never assume activation.
@@ -38,12 +37,16 @@ https://mise.jdx.dev cover the rest.
 | Upgrade to newest and rewrite request | `mise upgrade --bump node` |
 | Remove from config | `mise unuse node` |
 | Delete installed version | `mise uninstall node@22` |
+| Set an env variable | `mise set FOO=bar` · unset: `mise unset FOO` |
+| Print resolved environment | `mise env` (`--json`/`--dotenv`) |
+| List tasks | `mise tasks ls` · inspect: `mise tasks info <name>` |
+| Check setup | `mise config ls` · `mise which <cmd>` · `mise doctor` |
 
 ## Environment variables
 
-Set project env vars under `[env]` in `mise.toml`. They apply to `mise exec`,
-`mise run`, shims, and activated shells — never to the config itself
-(`MISE_*` variables must be set in the real environment).
+Set project env vars under `[env]` in `mise.toml`; they apply to `mise exec`,
+`mise run`, shims, and activated shells — never to mise itself (`MISE_*`
+variables must be set in the real environment).
 
 ```toml
 [env]
@@ -54,28 +57,30 @@ _.path = ["bin", "{{config_root}}/node_modules/.bin"]
 _.python.venv = { path = ".venv", create = true }
 ```
 
-- `mise set FOO=bar` / `mise unset FOO` edit `[env]` from the CLI;
-  `mise env` prints the resolved environment (`--dotenv`/`--json` formats).
-- Directives live in the `_` table: `_.file` (dotenv/json/yaml/toml),
-  `_.path` (PATH entries, `position = "append"` to go behind tool paths),
-  `_.source` (run a bash script and take what it exports — keep it fast,
-  it runs on every env computation). See
-  [environments reference](references/environments.md).
 - Values are Tera templates plus shell-style expansion:
-  `LD_LIBRARY_PATH = "{{config_root}}/lib:${LD_LIBRARY_PATH:-}"`.
+  `LD_LIBRARY_PATH = "{{config_root}}/lib:${LD_LIBRARY_PATH:-}"`. A value may
+  only reference variables defined before it.
 - `NODE_ENV = false` unsets a variable; `{ default = "..." }` only sets it
-  when not already set.
-- Precedence: project config beats parent dirs beats global;
-  `mise.local.toml` and `mise.<MISE_ENV>.toml` layer on top.
+  when not already set. `{ required = "help text" }` is validated but never
+  assigned — `mise exec`/`mise run` abort with the help text if it is unset.
+- Directives live in the `_` table: `_.file` (dotenv/json/yaml/toml; globs
+  load matches, missing paths are skipped; `find_up = true` for monorepo
+  root `.env`), `_.path` (prepends ahead of tool paths unless
+  `position = "append"` — never write `PATH` directly), `_.source` (run a
+  bash script and take what it exports — keep it fast, it runs on every env
+  computation), `_.python.venv`.
+- Precedence: `mise.<env>.local.toml` > `mise.local.toml` > `mise.<env>.toml`
+  (`MISE_ENV`) > `mise.toml` > parent dirs > global config.
 - `mise --no-env` (or `MISE_NO_ENV=1`) skips all config env; safe mode
   (`MISE_SAFE=1`) ignores project env and never runs `_.source`.
 - Secrets: `redact = true` masks values in output; SOPS files and secret
-  managers via https://mise.jdx.dev/environments/secrets/.
+  managers are also supported.
 
 ## Tasks
 
 Define short tasks as TOML in `mise.toml`; move longer scripts to executable
-files in `mise-tasks/` (shebang + `#MISE description="..."` comment).
+files in `mise-tasks/` (shebang + `#MISE description="..."` comment; the name
+goes in the file or TOML, not both).
 
 ```toml
 [tasks.test]
@@ -86,9 +91,10 @@ run = "pytest -q"
 depends = ["lint", "test"]   # prerequisites run in parallel
 ```
 
-`mise run test` (installs missing tools first, unless disabled). `mise tasks ls`
-lists tasks; `mise tasks info <name>` shows where one is defined. Task args,
-dependencies, and caching: see [tasks reference](references/tasks.md).
+`mise run test` loads the project's tools and env and installs missing tools
+first; no shell activation needed. `depends` prerequisites run in parallel —
+list order does not sequence them; use run-step arrays or `wait_for` for
+strict ordering. Task arguments and caching are covered in the docs below.
 
 ## Common pitfalls
 
@@ -104,6 +110,8 @@ dependencies, and caching: see [tasks reference](references/tasks.md).
   `.python-version`, etc. need `idiomatic_version_file_enable_tools` enabled.
 - **CI/containers**: `mise install` then `mise exec`/`mise run`; cache
   `~/.local/share/mise` between runs. There's an official GitHub Action.
+- **Deprecated syntax**: top-level `env_file`/`dotenv`/`env_path` are
+  replaced by `env._.file` / `env._.path`; `env.mise.*` by `env._.*`.
 
 ## mise.toml quick example
 
@@ -119,23 +127,13 @@ NODE_ENV = "development"
 run = "npm run dev"
 ```
 
-## Deeper topics
+## More information
 
-Full docs: https://mise.jdx.dev — start here when this skill doesn't
-cover something:
+Full documentation: https://mise.jdx.dev (shell setup:
+https://mise.jdx.dev/shell-setup.html · CI:
+https://mise.jdx.dev/continuous-integration.html · every subcommand:
+https://mise.jdx.dev/cli/).
 
-- [Config files & precedence](https://mise.jdx.dev/configuration.html), full [`mise.toml` reference](https://mise.jdx.dev/configuration/reference.html), [`[settings]`](https://mise.jdx.dev/configuration/settings.html)
-- [Tool versions & idiomatic version files](https://mise.jdx.dev/dev-tools/versions.html), [lockfiles](https://mise.jdx.dev/dev-tools/mise-lock.html)
-- [Shims vs activation vs exec](https://mise.jdx.dev/dev-tools/shims.html)
-- [Tool backends](https://mise.jdx.dev/dev-tools/backends/), [tool registry](https://mise.jdx.dev/registry.html)
-- Language guides: [node](https://mise.jdx.dev/lang/node.html), [python](https://mise.jdx.dev/lang/python.html), [go](https://mise.jdx.dev/lang/go.html), …
-- [Secrets & redaction](https://mise.jdx.dev/environments/secrets/)
-- Task [arguments](https://mise.jdx.dev/tasks/task-arguments.html), [dependencies & ordering](https://mise.jdx.dev/tasks/architecture.html), [caching](https://mise.jdx.dev/tasks/caching.html), [monorepo](https://mise.jdx.dev/tasks/monorepo.html)
-- [Shell setup](https://mise.jdx.dev/shell-setup.html) (bash, zsh, fish, …), [IDE integration](https://mise.jdx.dev/ide-integration.html), [CI](https://mise.jdx.dev/continuous-integration.html)
-- [Bootstrap](https://mise.jdx.dev/bootstrap.html) (machine setup, dotfiles, services)
-- [Security, trust, safe mode](https://mise.jdx.dev/security.html), [hooks](https://mise.jdx.dev/hooks.html), [templates](https://mise.jdx.dev/templates.html)
-- [Troubleshooting](https://mise.jdx.dev/troubleshooting.html), [CLI subcommand index](https://mise.jdx.dev/cli/)
+## Test scenarios
 
-- Tool versions, pinning, lockfiles, backends: [references/tools.md](references/tools.md)
-- Environment variables, directives, precedence, secrets: [references/environments.md](references/environments.md)
-- Tasks (args, dependencies, file tasks, caching): [references/tasks.md](references/tasks.md)
+See [references/SCENARIOS.md](references/SCENARIOS.md).
