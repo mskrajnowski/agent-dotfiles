@@ -7,15 +7,23 @@ description: Work with issues on the user's forge — create, list, update, fetc
 
 Scripts live in this skill's directory; run them via relative path. They are [uv inline-dependency scripts](https://docs.astral.sh/uv/guides/scripts/) — run them directly (`./scripts/foo.py`) or via `uv run --script scripts/foo.py`; **never** with a bare `python`/`python3` invocation, which skips uv's dependency resolution and fails with `ModuleNotFoundError`. All scripts use `curl --netrc` against `http://forge.local/api/v1` (see the `forge` skill for shared conventions). Each script prints only an agent-friendly summary — never raw JSON.
 
+**Text from stdin:** bodies and comment text are always read from stdin (`... <<'HEREDOC'` or a pipe); all other arguments are given literally on the command line.
+
 ## Workflows
 
 ### Create an issue
 
 ```bash
-scripts/open_issue.py <owner>/<repo> <title> [body|-]
+scripts/open_issue.py <owner>/<repo> <title>
 ```
 
-- `body` optional; reads stdin if `-` is passed. Returns the issue number and URL.
+- Body is read from stdin (required). Returns the issue number and URL.
+
+```bash
+scripts/open_issue.py owner/repo "Title here" <<'HEREDOC'
+Body text on stdin
+HEREDOC
+```
 
 ### List issues
 
@@ -36,18 +44,33 @@ Prints `id`, `author`, and body (truncated) per comment. Use to review discussio
 ### Comment on an issue
 
 ```bash
-scripts/add_issue_comment.py <owner>/<repo> <index> <text|->
+scripts/add_issue_comment.py <owner>/<repo> <index>
 ```
 
-Reads the comment from stdin if `-` is passed. Prints the new comment's id.
+Reads the comment from stdin. Prints the new comment's id.
+
+```bash
+scripts/add_issue_comment.py owner/repo 12 <<'HEREDOC'
+Comment text on stdin
+HEREDOC
+```
 
 ### Update an issue
 
 ```bash
-scripts/update_issue.py <owner>/<repo> <index> [--title <text>] [--body <text|->]
+scripts/update_issue.py <owner>/<repo> <index> [--title <text>]
 ```
 
-`--body -` reads the body from stdin. Title and body only — state changes (close/reopen) are the user's action.
+Body is read from stdin and replaced; with empty stdin and `--title`, only the title changes. Title and body only — state changes (close/reopen) are the user's action.
+
+```bash
+scripts/update_issue.py owner/repo 12 <<'HEREDOC'
+New body on stdin
+HEREDOC
+
+# title-only update: leave stdin empty, e.g.
+scripts/update_issue.py owner/repo 12 --title "New title" </dev/null
+```
 
 ### Get issue summary
 

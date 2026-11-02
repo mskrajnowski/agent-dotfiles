@@ -7,16 +7,24 @@ description: Work with pull requests on the user's forge — open, list, review 
 
 Scripts live in this skill's directory; run them with the skill dir as cwd or via relative path. They are [uv inline-dependency scripts](https://docs.astral.sh/uv/guides/scripts/) — run them directly (`./scripts/foo.py`) or via `uv run --script scripts/foo.py`; **never** with a bare `python`/`python3` invocation, which skips uv's dependency resolution and fails with `ModuleNotFoundError`. All scripts use `curl --netrc` against `http://forge.local/api/v1` (see the `forge` skill for shared conventions). Each script prints only an agent-friendly summary — never raw JSON.
 
+**Text from stdin:** bodies and comment text are always read from stdin (`... <<'HEREDOC'` or a pipe); all other arguments are given literally on the command line.
+
 ## Workflows
 
 ### Open a PR
 
 ```bash
-scripts/open_pr.py <owner>/<repo> <head> <base> <title> [body]
+scripts/open_pr.py <owner>/<repo> <head> <base> <title>
 ```
 
-- `body` optional; reads stdin if `-` is passed. Returns the PR number and URL.
+- Body is read from stdin (required). Returns the PR number and URL.
 - Branch must exist on the remote first: `git push -u origin <head>`.
+
+```bash
+scripts/open_pr.py owner/repo feat/my-change main "feat(scope): summary" <<'HEREDOC'
+PR description on stdin
+HEREDOC
+```
 
 ### List PRs
 
@@ -37,23 +45,41 @@ Prints each review's state and every comment (`id`, `path`, `line`, `author`, `b
 ### Add a general PR comment
 
 ```bash
-scripts/add_pr_comment.py <owner>/<repo> <index> <text|->
+scripts/add_pr_comment.py <owner>/<repo> <index>
 ```
 
 Use to summarize what was addressed (mention the commit), explain decisions, or give status updates.
 
+```bash
+scripts/add_pr_comment.py owner/repo 7 <<'HEREDOC'
+Comment text on stdin
+HEREDOC
+```
+
 ### Add an inline review comment
 
 ```bash
-scripts/add_pr_review_comment.py <owner>/<repo> <index> <path> <line> <text|->
+scripts/add_pr_review_comment.py <owner>/<repo> <index> <path> <line>
 ```
 
 Marks a specific place in the diff — use to flag spots needing the user's feedback (architecture decisions, unclear instructions, alternatives worth discussing).
 
+```bash
+scripts/add_pr_review_comment.py owner/repo 7 src/api.py 42 <<'HEREDOC'
+Comment text on stdin
+HEREDOC
+```
+
 ### Reply to a review comment
 
 ```bash
-scripts/reply_pr_review_comment.py <owner>/<repo> <index> <review-id> <comment-id> <text|->
+scripts/reply_pr_review_comment.py <owner>/<repo> <index> <review-id> <comment-id>
+```
+
+```bash
+scripts/reply_pr_review_comment.py owner/repo 7 105 203 <<'HEREDOC'
+Reply text on stdin
+HEREDOC
 ```
 
 The comment ids come from `review_pr_comments.py` output (`COMMENT <review-id>-<id>`). Behavior depends on the comment type:
@@ -93,12 +119,19 @@ Requests (or re-requests) review. Re-request after force-pushing fixes.
 ### Update a PR
 
 ```bash
-scripts/update_pr.py <owner>/<repo> <index> [--title <text>] [--body <text|-|->]
+scripts/update_pr.py <owner>/<repo> <index> [--title <text>]
 ```
 
-Title and body only — state changes (close/reopen) are the user's action.
+Title and body only — state changes (close/reopen) are the user's action. Body is read from stdin and replaced; with empty stdin and `--title`, only the title changes.
 
-`--body -` reads the body from stdin.
+```bash
+scripts/update_pr.py owner/repo 7 <<'HEREDOC'
+New body on stdin
+HEREDOC
+
+# title-only update: leave stdin empty, e.g.
+scripts/update_pr.py owner/repo 7 --title "New title" </dev/null
+```
 
 ### Merging
 

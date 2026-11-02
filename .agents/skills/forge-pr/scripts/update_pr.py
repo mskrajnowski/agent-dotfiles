@@ -33,10 +33,8 @@ def main() -> None:
     parser.add_argument("repo", metavar="owner/repo")
     parser.add_argument("index", type=int)
     parser.add_argument("--title")
-    parser.add_argument("--body", metavar="body|-", help="new body; '-' reads it from stdin")
     args = parser.parse_args()
-    if args.body == "-":
-        args.body = sys.stdin.read().rstrip("\n")
+    args.body = sys.stdin.read().rstrip("\n")
 
     payload = {}
     if args.title:
@@ -44,7 +42,7 @@ def main() -> None:
     if args.body:
         payload["body"] = args.body
     if not payload:
-        sys.exit("ERROR: nothing to update — pass --title and/or --body")
+        sys.exit("ERROR: nothing to update — pipe the new body on stdin and/or pass --title")
 
     session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
     resp = session.patch(

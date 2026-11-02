@@ -27,7 +27,7 @@ New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
 - Use `requests` directly — there is deliberately no shared client module. Each script defines its own `FORGE_URL`/`BASE`/`TIMEOUT` constants, creates a `requests.Session()` (auth is picked up from `~/.netrc` automatically — never set an explicit `auth=` or Authorization header, that would override netrc), and passes `timeout=TIMEOUT` on every call.
 - Each caller parses its own response: `.json()` when the endpoint returns JSON, `.text` for plain-text endpoints (e.g. the `.diff` URL). Never dump raw JSON to stdout.
 - Each script carries its own tiny `fail(resp, context)` helper that prints `ERROR: HTTP <code>[ (<context>)]` plus the API's `.message` to stderr and exits 1 — keep the error contract identical across scripts.
-- CLI and presentation helpers (stdin `-` handling, indentation, timeline rendering) live directly in the scripts that use them — don't re-extract them into a shared module.
+- Bodies and comment text always come from stdin (scripts read `sys.stdin` after parsing their other CLI arguments) — no optional text arguments on the command line. CLI and presentation helpers (stdin text reading, indentation, timeline rendering) live directly in the scripts that use them — don't re-extract them into a shared module.
 - Parse the CLI with `argparse` (types for indexes, `choices` for states); don't hand-roll positional/flag parsing.
 - On success print a one-line confirmation (with ids, path:line, or short SHA). On failure print `ERROR: HTTP <code>` plus the response's `.message` to stderr and `exit 1` (the `fail()` helper does this).
 - Keep output for agent eyes: truncate comment bodies and timelines; never emit raw JSON.

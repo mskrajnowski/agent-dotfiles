@@ -37,10 +37,10 @@ def main() -> None:
     parser.add_argument("index", type=int)
     parser.add_argument("review", type=int, help="review id from review_pr_comments.py")
     parser.add_argument("comment", type=int, help="comment id from review_pr_comments.py")
-    parser.add_argument("text", metavar="text|-", help="reply text; '-' reads it from stdin")
     args = parser.parse_args()
-    if args.text == "-":
-        args.text = sys.stdin.read().rstrip("\n")
+    args.text = sys.stdin.read().rstrip("\n")
+    if not args.text:
+        sys.exit("ERROR: empty reply text")
     repo, index = args.repo, args.index
 
     session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)

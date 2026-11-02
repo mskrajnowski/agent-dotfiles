@@ -33,12 +33,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Create an issue on the forge.")
     parser.add_argument("repo", metavar="owner/repo")
     parser.add_argument("title")
-    parser.add_argument(
-        "body", nargs="?", default="", metavar="body|-", help="issue body; '-' reads it from stdin"
-    )
     args = parser.parse_args()
-    if args.body == "-":
-        args.body = sys.stdin.read().rstrip("\n")
+    args.body = sys.stdin.read().rstrip("\n")
+    if not args.body:
+        sys.exit("ERROR: empty body — pipe the issue body on stdin (required)")
 
     session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
     resp = session.post(
