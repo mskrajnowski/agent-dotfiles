@@ -129,10 +129,21 @@ run = "npm run dev"
 
 ## More information
 
-Full documentation: https://mise.jdx.dev (shell setup:
-https://mise.jdx.dev/shell-setup.html · CI:
-https://mise.jdx.dev/continuous-integration.html · every subcommand:
-https://mise.jdx.dev/cli/).
+Everything above is our summary for day-to-day use. The full, authoritative
+documentation lives at https://mise.jdx.dev — use it when this skill doesn't
+cover something:
+
+- [Config files & precedence](https://mise.jdx.dev/configuration.html), full [`mise.toml` reference](https://mise.jdx.dev/configuration/reference.html), [`[settings]`](https://mise.jdx.dev/configuration/settings.html)
+- [Tool versions & idiomatic version files](https://mise.jdx.dev/dev-tools/versions.html), [lockfiles](https://mise.jdx.dev/dev-tools/mise-lock.html)
+- [Shims vs activation vs exec](https://mise.jdx.dev/dev-tools/shims.html)
+- [Tool backends](https://mise.jdx.dev/dev-tools/backends/), [tool registry](https://mise.jdx.dev/registry.html)
+- Language guides: [node](https://mise.jdx.dev/lang/node.html), [python](https://mise.jdx.dev/lang/python.html), [go](https://mise.jdx.dev/lang/go.html), …
+- [Secrets & redaction](https://mise.jdx.dev/environments/secrets/)
+- Task [arguments](https://mise.jdx.dev/tasks/task-arguments.html), [dependencies & ordering](https://mise.jdx.dev/tasks/architecture.html), [caching](https://mise.jdx.dev/tasks/caching.html), [monorepo](https://mise.jdx.dev/tasks/monorepo.html)
+- [Shell setup](https://mise.jdx.dev/shell-setup.html) (bash, zsh, fish, …), [IDE integration](https://mise.jdx.dev/ide-integration.html), [CI](https://mise.jdx.dev/continuous-integration.html)
+- [Bootstrap](https://mise.jdx.dev/bootstrap.html) (machine setup, dotfiles, services)
+- [Security, trust, safe mode](https://mise.jdx.dev/security.html), [hooks](https://mise.jdx.dev/hooks.html), [templates](https://mise.jdx.dev/templates.html)
+- [Troubleshooting](https://mise.jdx.dev/troubleshooting.html), [CLI subcommand index](https://mise.jdx.dev/cli/)
 
 ## Test scenarios
 
