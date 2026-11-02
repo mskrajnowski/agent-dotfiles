@@ -36,6 +36,8 @@ def main() -> None:
     parser.add_argument("title")
     args = parser.parse_args()
     args.body = sys.stdin.read().rstrip("\n")
+    if not args.body:
+        sys.exit("ERROR: empty body — pipe the PR description on stdin (required)")
 
     session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
     resp = session.post(

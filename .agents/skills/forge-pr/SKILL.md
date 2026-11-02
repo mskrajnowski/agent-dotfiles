@@ -17,16 +17,13 @@ Scripts live in this skill's directory; run them with the skill dir as cwd or vi
 scripts/open_pr.py <owner>/<repo> <head> <base> <title>
 ```
 
-- Body is read from stdin (may be empty). Returns the PR number and URL.
+- Body is read from stdin (required). Returns the PR number and URL.
 - Branch must exist on the remote first: `git push -u origin <head>`.
 
 ```bash
 scripts/open_pr.py owner/repo feat/my-change main "feat(scope): summary" <<'HEREDOC'
 PR description on stdin
 HEREDOC
-
-# no body: leave stdin empty, e.g.
-scripts/open_pr.py owner/repo feat/my-change main "feat(scope): summary" </dev/null
 ```
 
 ### List PRs
@@ -131,6 +128,9 @@ Title and body only — state changes (close/reopen) are the user's action. Body
 scripts/update_pr.py owner/repo 7 <<'HEREDOC'
 New body on stdin
 HEREDOC
+
+# title-only update: leave stdin empty, e.g.
+scripts/update_pr.py owner/repo 7 --title "New title" </dev/null
 ```
 
 ### Merging

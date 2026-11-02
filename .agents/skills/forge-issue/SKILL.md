@@ -17,15 +17,12 @@ Scripts live in this skill's directory; run them via relative path. They are [uv
 scripts/open_issue.py <owner>/<repo> <title>
 ```
 
-- Body is read from stdin (may be empty). Returns the issue number and URL.
+- Body is read from stdin (required). Returns the issue number and URL.
 
 ```bash
 scripts/open_issue.py owner/repo "Title here" <<'HEREDOC'
 Body text on stdin
 HEREDOC
-
-# no body: leave stdin empty, e.g.
-scripts/open_issue.py owner/repo "Title here" </dev/null
 ```
 
 ### List issues
@@ -65,6 +62,15 @@ scripts/update_issue.py <owner>/<repo> <index> [--title <text>]
 ```
 
 Body is read from stdin and replaced; with empty stdin and `--title`, only the title changes. Title and body only — state changes (close/reopen) are the user's action.
+
+```bash
+scripts/update_issue.py owner/repo 12 <<'HEREDOC'
+New body on stdin
+HEREDOC
+
+# title-only update: leave stdin empty, e.g.
+scripts/update_issue.py owner/repo 12 --title "New title" </dev/null
+```
 
 ### Get issue summary
 
