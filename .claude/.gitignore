@@ -1,7 +1,0 @@
-*
-!.gitignore
-!CLAUDE.md
-!settings.json
-!skills
-!agents/
-!agents/**
