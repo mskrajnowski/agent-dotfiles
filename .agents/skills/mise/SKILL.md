@@ -121,9 +121,27 @@ run = "npm run dev"
 
 ## Deeper topics
 
-For anything not covered here, look up the right page in the
-docs table of contents: [references/docs-toc.md](references/docs-toc.md)
-(map of https://mise.jdx.dev by topic).
+Full docs: https://mise.jdx.dev — start here when this skill doesn't
+cover something:
+
+| Topic | Page |
+| --- | --- |
+| Config files, precedence, `mise.toml` reference | /configuration.html (reference: /configuration/reference.html) |
+| `[settings]` | /configuration/settings.html |
+| Tool versions, idiomatic version files | /dev-tools/versions.html |
+| Lockfiles (`mise.lock`) | /dev-tools/mise-lock.html |
+| Shims vs activation vs exec | /dev-tools/shims.html |
+| Tool backends | /dev-tools/backends/ · registry: /registry.html |
+| Language guides (node, python, go, …) | /lang/ |
+| Secrets & redaction | /environments/secrets/ |
+| Task args, ordering, caching, monorepo | /tasks/task-arguments.html · /tasks/architecture.html · /tasks/caching.html · /tasks/monorepo.html |
+| Shell setup (bash, zsh, fish, …) | /shell-setup.html |
+| IDE integration | /ide-integration.html |
+| CI / GitHub Action | /continuous-integration.html |
+| Bootstrap (machine setup, dotfiles, services) | /bootstrap.html |
+| Security, trust, safe mode | /security.html |
+| Hooks | /hooks.html · templates: /templates.html |
+| Troubleshooting | /troubleshooting.html · every subcommand: /cli/ |
 
 - Tool versions, pinning, lockfiles, backends: [references/tools.md](references/tools.md)
 - Environment variables, directives, precedence, secrets: [references/environments.md](references/environments.md)
