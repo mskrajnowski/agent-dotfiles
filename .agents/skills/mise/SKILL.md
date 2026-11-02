@@ -121,7 +121,10 @@ run = "npm run dev"
 
 ## Deeper topics
 
+For anything not covered here, look up the right page in the
+docs table of contents: [references/docs-toc.md](references/docs-toc.md)
+(map of https://mise.jdx.dev by topic).
+
 - Tool versions, pinning, lockfiles, backends: [references/tools.md](references/tools.md)
 - Environment variables, directives, precedence, secrets: [references/environments.md](references/environments.md)
 - Tasks (args, dependencies, file tasks, caching): [references/tasks.md](references/tasks.md)
-- Official docs: https://mise.jdx.dev — dev tools, environments, tasks, bootstrap guides.
