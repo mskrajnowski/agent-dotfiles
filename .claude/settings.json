@@ -1,4 +1,5 @@
 {
   "theme": "auto",
-  "model": "sonnet"
+  "model": "sonnet",
+  "showThinkingSummaries": true
 }
