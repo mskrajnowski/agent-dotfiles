@@ -144,7 +144,3 @@ cover something:
 - [Bootstrap](https://mise.jdx.dev/bootstrap.html) (machine setup, dotfiles, services)
 - [Security, trust, safe mode](https://mise.jdx.dev/security.html), [hooks](https://mise.jdx.dev/hooks.html), [templates](https://mise.jdx.dev/templates.html)
 - [Troubleshooting](https://mise.jdx.dev/troubleshooting.html), [CLI subcommand index](https://mise.jdx.dev/cli/)
-
-## Test scenarios
-
-See [references/SCENARIOS.md](references/SCENARIOS.md).
