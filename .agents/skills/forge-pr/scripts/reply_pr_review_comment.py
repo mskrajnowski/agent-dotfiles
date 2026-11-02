@@ -39,6 +39,8 @@ def main() -> None:
     parser.add_argument("comment", type=int, help="comment id from review_pr_comments.py")
     args = parser.parse_args()
     args.text = sys.stdin.read().rstrip("\n")
+    if not args.text:
+        sys.exit("ERROR: empty reply text")
     repo, index = args.repo, args.index
 
     session = requests.Session()  # auth comes from ~/.netrc (or $NETRC)
