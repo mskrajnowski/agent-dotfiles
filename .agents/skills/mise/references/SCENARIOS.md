@@ -23,7 +23,16 @@ Recorded use cases to verify against when editing this skill.
   works in a non-activated shell (validates pitfall #1 guidance).
 - `mise which fd` prints a path under `~/.local/share/mise/installs`.
 
-## 4. Reference loading
+## 4. Environment variables
+
+- In a temp project with `[env] FOO = "bar"`, `mise exec -- sh -c 'echo $FOO'`
+  prints `bar`; a plain shell without activation does not.
+- `mise set FOO=bar` writes `[env]` to the project's `mise.toml`;
+  `mise unset FOO` removes it.
+- A `required` variable that is unset makes `mise exec` fail with the help
+  text, while an activated shell only warns.
+
+## 5. Reference loading
 
 - references/tasks.md and references/tools.md are valid, loadable, and
   consistent with SKILL.md (no contradicting commands).

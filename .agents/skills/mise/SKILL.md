@@ -1,6 +1,6 @@
 ---
 name: mise
-description: Use mise (https://mise.jdx.dev/) to install dev tools, manage per-project tool versions and environment variables, and define/run tasks in mise.toml. Use when the user mentions mise, mise.toml, .tool-versions, installing tools like node/python/ruby/go, per-project tool versions, or mise tasks. Covers `mise use/install/exec/run/upgrade`, config file locations, and shell activation.
+description: Use mise (https://mise.jdx.dev/) to install dev tools, manage per-project tool versions, set environment variables, and define/run tasks in mise.toml. Use when the user mentions mise, mise.toml, .tool-versions, installing tools like node/python/ruby/go, per-project tool versions, or mise tasks. Covers `mise use/install/exec/run/upgrade`, config file locations, and shell activation.
 ---
 
 # mise
@@ -38,6 +38,39 @@ https://mise.jdx.dev cover the rest.
 | Upgrade to newest and rewrite request | `mise upgrade --bump node` |
 | Remove from config | `mise unuse node` |
 | Delete installed version | `mise uninstall node@22` |
+
+## Environment variables
+
+Set project env vars under `[env]` in `mise.toml`. They apply to `mise exec`,
+`mise run`, shims, and activated shells — never to the config itself
+(`MISE_*` variables must be set in the real environment).
+
+```toml
+[env]
+NODE_ENV = "production"
+DATABASE_URL = { required = "Set to your PostgreSQL connection string" }
+_.file = ".env"                                   # optional; missing files are skipped
+_.path = ["bin", "{{config_root}}/node_modules/.bin"]
+_.python.venv = { path = ".venv", create = true }
+```
+
+- `mise set FOO=bar` / `mise unset FOO` edit `[env]` from the CLI;
+  `mise env` prints the resolved environment (`--dotenv`/`--json` formats).
+- Directives live in the `_` table: `_.file` (dotenv/json/yaml/toml),
+  `_.path` (PATH entries, `position = "append"` to go behind tool paths),
+  `_.source` (run a bash script and take what it exports — keep it fast,
+  it runs on every env computation). See
+  [environments reference](references/environments.md).
+- Values are Tera templates plus shell-style expansion:
+  `LD_LIBRARY_PATH = "{{config_root}}/lib:${LD_LIBRARY_PATH:-}"`.
+- `NODE_ENV = false` unsets a variable; `{ default = "..." }` only sets it
+  when not already set.
+- Precedence: project config beats parent dirs beats global;
+  `mise.local.toml` and `mise.<MISE_ENV>.toml` layer on top.
+- `mise --no-env` (or `MISE_NO_ENV=1`) skips all config env; safe mode
+  (`MISE_SAFE=1`) ignores project env and never runs `_.source`.
+- Secrets: `redact = true` masks values in output; SOPS files and secret
+  managers via https://mise.jdx.dev/environments/secrets/.
 
 ## Tasks
 
@@ -89,5 +122,6 @@ run = "npm run dev"
 ## Deeper topics
 
 - Tool versions, pinning, lockfiles, backends: [references/tools.md](references/tools.md)
+- Environment variables, directives, precedence, secrets: [references/environments.md](references/environments.md)
 - Tasks (args, dependencies, file tasks, caching): [references/tasks.md](references/tasks.md)
 - Official docs: https://mise.jdx.dev — dev tools, environments, tasks, bootstrap guides.
