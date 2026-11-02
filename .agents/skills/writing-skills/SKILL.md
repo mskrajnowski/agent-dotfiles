@@ -22,7 +22,7 @@ Do **not** write a skill for one-off tasks, or for behavior that belongs in `AGE
 2. **Location.** Skills live in the current project's repo at `.agents/skills/<name>/`, committed and shared with the project's collaborators. Global skills (available across projects) go to the user's dotfiles repo (`agent-dotfiles`) instead, per that repo's instructions.
 3. **Write `SKILL.md`.** Follow the spec (see SPEC.md). Keep it under 500 lines. The `description` must state *what it does* and *when to use it*, with concrete trigger keywords — this is the only routing signal.
 4. **Progressive disclosure.** Move detail out of `SKILL.md` into `references/` (loaded on demand) or `scripts/`. Keep references one level deep from `SKILL.md`.
-5. **Write regression scenarios.** Record the real-world test scenarios for the skill (inputs, steps, expected results) in `references/SCENARIOS.md`, so future edits can be verified against the same use cases.
+5. **Write regression scenarios.** Record the real-world test scenarios for the skill (inputs, steps, expected results) in `SKILL_TEST.md`, so future edits can be verified against the same use cases.
 6. **Validate.** Run `agentskills validate <skill-dir>` (see compatibility requirements in the testing-skills skill). Fix all errors.
 7. **Test.** Use the `testing-skills` skill to verify the skill routes correctly and its instructions work end to end.
 8. **Commit and PR.** Follow the project repo's conventions — typically a topic branch, conventional commits, atomic commits, then a pull request on the project's forge.

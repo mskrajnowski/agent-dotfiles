@@ -18,7 +18,7 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 **Expected:**
 - Validation passes; name matches the directory.
 - Routing: prompt about "creating a new skill" loads the skill; a plain coding prompt does not.
-- End-to-end dry run resolves SPEC.md and SCENARIOS.md paths from the skill root.
+- End-to-end dry run resolves SPEC.md and SKILL_TEST.md paths from the skill root.
 - Full CHECKLIST.md is walked through and results presented to the user.
 
 ## Scenario 3: quick check after a description tweak

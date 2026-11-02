@@ -10,7 +10,7 @@ Real-world scenarios for verifying this skill. Run each after edits to the skill
 - Agent reads SPEC.md, drafts the directory tree and SKILL.md outline, and asks for feedback before building.
 - Global skill created in the dotfiles repo at `.agents/skills/<name>/` (agent-dotfiles).
 - `agentskills validate <skill-dir>` passes.
-- `references/SCENARIOS.md` is created for the new skill.
+- `SKILL_TEST.md` is created for the new skill.
 - testing-skills is used to test routing and end-to-end behavior.
 - Commit on a topic branch with a conventional message; PR opened on forge.local.
 - Because this is a global skill: install.sh is re-run so the skill is stowed into `$HOME`.
