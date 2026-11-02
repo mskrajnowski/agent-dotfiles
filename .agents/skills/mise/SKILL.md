@@ -124,17 +124,17 @@ run = "npm run dev"
 Full docs: https://mise.jdx.dev — start here when this skill doesn't
 cover something:
 
-- Config files & precedence — [/configuration.html](https://mise.jdx.dev/configuration.html); full `mise.toml` reference — [/configuration/reference.html](https://mise.jdx.dev/configuration/reference.html); `[settings]` — [/configuration/settings.html](https://mise.jdx.dev/configuration/settings.html)
-- Tool versions & idiomatic version files — [/dev-tools/versions.html](https://mise.jdx.dev/dev-tools/versions.html); lockfiles — [/dev-tools/mise-lock.html](https://mise.jdx.dev/dev-tools/mise-lock.html)
-- Shims vs activation vs exec — [/dev-tools/shims.html](https://mise.jdx.dev/dev-tools/shims.html)
-- Tool backends — [/dev-tools/backends/](https://mise.jdx.dev/dev-tools/backends/); tool registry — [/registry.html](https://mise.jdx.dev/registry.html)
-- Language guides (node, python, go, …) — [/lang/node.html](https://mise.jdx.dev/lang/node.html), [/lang/python.html](https://mise.jdx.dev/lang/python.html), [/lang/go.html](https://mise.jdx.dev/lang/go.html)
-- Secrets & redaction — [/environments/secrets/](https://mise.jdx.dev/environments/secrets/)
-- Task arguments — [/tasks/task-arguments.html](https://mise.jdx.dev/tasks/task-arguments.html); dependencies & ordering — [/tasks/architecture.html](https://mise.jdx.dev/tasks/architecture.html); caching — [/tasks/caching.html](https://mise.jdx.dev/tasks/caching.html); monorepo — [/tasks/monorepo.html](https://mise.jdx.dev/tasks/monorepo.html)
-- Shell setup (bash, zsh, fish, …) — [/shell-setup.html](https://mise.jdx.dev/shell-setup.html); IDE integration — [/ide-integration.html](https://mise.jdx.dev/ide-integration.html); CI — [/continuous-integration.html](https://mise.jdx.dev/continuous-integration.html)
-- Bootstrap (machine setup, dotfiles, services) — [/bootstrap.html](https://mise.jdx.dev/bootstrap.html)
-- Security, trust, safe mode — [/security.html](https://mise.jdx.dev/security.html); hooks — [/hooks.html](https://mise.jdx.dev/hooks.html); templates — [/templates.html](https://mise.jdx.dev/templates.html)
-- Troubleshooting — [/troubleshooting.html](https://mise.jdx.dev/troubleshooting.html); every subcommand — [/cli/](https://mise.jdx.dev/cli/)
+- [Config files & precedence](https://mise.jdx.dev/configuration.html), full [`mise.toml` reference](https://mise.jdx.dev/configuration/reference.html), [`[settings]`](https://mise.jdx.dev/configuration/settings.html)
+- [Tool versions & idiomatic version files](https://mise.jdx.dev/dev-tools/versions.html), [lockfiles](https://mise.jdx.dev/dev-tools/mise-lock.html)
+- [Shims vs activation vs exec](https://mise.jdx.dev/dev-tools/shims.html)
+- [Tool backends](https://mise.jdx.dev/dev-tools/backends/), [tool registry](https://mise.jdx.dev/registry.html)
+- Language guides: [node](https://mise.jdx.dev/lang/node.html), [python](https://mise.jdx.dev/lang/python.html), [go](https://mise.jdx.dev/lang/go.html), …
+- [Secrets & redaction](https://mise.jdx.dev/environments/secrets/)
+- Task [arguments](https://mise.jdx.dev/tasks/task-arguments.html), [dependencies & ordering](https://mise.jdx.dev/tasks/architecture.html), [caching](https://mise.jdx.dev/tasks/caching.html), [monorepo](https://mise.jdx.dev/tasks/monorepo.html)
+- [Shell setup](https://mise.jdx.dev/shell-setup.html) (bash, zsh, fish, …), [IDE integration](https://mise.jdx.dev/ide-integration.html), [CI](https://mise.jdx.dev/continuous-integration.html)
+- [Bootstrap](https://mise.jdx.dev/bootstrap.html) (machine setup, dotfiles, services)
+- [Security, trust, safe mode](https://mise.jdx.dev/security.html), [hooks](https://mise.jdx.dev/hooks.html), [templates](https://mise.jdx.dev/templates.html)
+- [Troubleshooting](https://mise.jdx.dev/troubleshooting.html), [CLI subcommand index](https://mise.jdx.dev/cli/)
 
 - Tool versions, pinning, lockfiles, backends: [references/tools.md](references/tools.md)
 - Environment variables, directives, precedence, secrets: [references/environments.md](references/environments.md)
