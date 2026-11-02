@@ -1,0 +1,93 @@
+---
+name: mise
+description: Use mise (https://mise.jdx.dev/) to install dev tools, manage per-project tool versions and environment variables, and define/run tasks in mise.toml. Use when the user mentions mise, mise.toml, .tool-versions, installing tools like node/python/ruby/go, per-project tool versions, or mise tasks. Covers `mise use/install/exec/run/upgrade`, config file locations, and shell activation.
+---
+
+# mise
+
+mise installs a project's tools, sets its environment variables, and runs its
+tasks from `mise.toml`. Check the installed version with `mise --version`; the
+CLI help (`mise <command> --help`) is authoritative and the docs at
+https://mise.jdx.dev cover the rest.
+
+## Core model
+
+1. Config files (`mise.toml`, `~/.config/mise/config.toml`) declare `[tools]`,
+   `[env]`, and `[tasks]`. mise reads them from the current directory, its
+   parents, and the global config; the closest file wins. `mise config ls`
+   shows which files apply.
+2. A `[tools]` entry like `node = "24"` is a *request*, not a pin — mise
+   installs a matching version and reuses it. Pin with exact versions or
+   `mise lock`; see [tools reference](references/tools.md).
+3. Tools land on `PATH` via shell activation, shims, or by prefixing commands
+   with `mise exec --`. Scripts and CI should use `mise exec` / `mise run`,
+   never assume activation.
+
+## Everyday commands
+
+| Goal | Command |
+| --- | --- |
+| Add/set a project's tool version | `mise use node@24` |
+| Set a personal default | `mise use --global node@24` |
+| Install tools the config declares | `mise install` |
+| Run one command with the project's tools | `mise exec -- node --version` |
+| Try a version without saving it | `mise exec node@24 -- node --version` |
+| Show current tools | `mise ls --current` |
+| List installable versions | `mise ls-remote node` |
+| Upgrade within the request | `mise upgrade node` |
+| Upgrade to newest and rewrite request | `mise upgrade --bump node` |
+| Remove from config | `mise unuse node` |
+| Delete installed version | `mise uninstall node@22` |
+
+## Tasks
+
+Define short tasks as TOML in `mise.toml`; move longer scripts to executable
+files in `mise-tasks/` (shebang + `#MISE description="..."` comment).
+
+```toml
+[tasks.test]
+description = "Run tests"
+run = "pytest -q"
+
+[tasks.check]
+depends = ["lint", "test"]   # prerequisites run in parallel
+```
+
+`mise run test` (installs missing tools first, unless disabled). `mise tasks ls`
+lists tasks; `mise tasks info <name>` shows where one is defined. Task args,
+dependencies, and caching: see [tasks reference](references/tasks.md).
+
+## Common pitfalls
+
+- **`command not found` right after `mise use`**: in an activated shell, the
+  environment refreshes at the next prompt. In the same non-interactive shell,
+  use `mise exec -- <cmd>`.
+- **Wrong version running**: `mise which <cmd>` shows the binary mise would
+  pick; a parent directory's config may be selecting it. Check `mise config ls`.
+- **Writing config to the wrong file**: `mise use` edits the first loaded
+  config that declares the tool, or creates `mise.toml` in the project. Use
+  `--global` / `--path` to target a file explicitly.
+- **Other version files**: `.tool-versions` is read natively; `.nvmrc`,
+  `.python-version`, etc. need `idiomatic_version_file_enable_tools` enabled.
+- **CI/containers**: `mise install` then `mise exec`/`mise run`; cache
+  `~/.local/share/mise` between runs. There's an official GitHub Action.
+
+## mise.toml quick example
+
+```toml
+[tools]
+node = "24"
+python = "3.14"
+
+[env]
+NODE_ENV = "development"
+
+[tasks.dev]
+run = "npm run dev"
+```
+
+## Deeper topics
+
+- Tool versions, pinning, lockfiles, backends: [references/tools.md](references/tools.md)
+- Tasks (args, dependencies, file tasks, caching): [references/tasks.md](references/tasks.md)
+- Official docs: https://mise.jdx.dev — dev tools, environments, tasks, bootstrap guides.

@@ -1,0 +1,29 @@
+# Test scenarios for the mise skill
+
+Recorded use cases to verify against when editing this skill.
+
+## 1. Routing
+
+- Input: "how do I install node 22 for this project with mise?"
+  Expected: skill activates; answer uses `mise use node@22` + `mise exec`.
+- Input: "what is the capital of France?"
+  Expected: skill does not activate.
+- Input: "add a task to run tests via mise"
+  Expected: skill activates; tasks section or references/tasks.md used.
+
+## 2. Command accuracy
+
+- Every command in SKILL.md's everyday table runs without error against the
+  installed mise (use harmless ones: `mise ls --current`, `mise ls-remote node`,
+  `mise tasks ls`, `mise config ls`).
+
+## 3. Pitfall correctness
+
+- Running `mise use --global fd@latest` then `mise exec -- fd --version`
+  works in a non-activated shell (validates pitfall #1 guidance).
+- `mise which fd` prints a path under `~/.local/share/mise/installs`.
+
+## 4. Reference loading
+
+- references/tasks.md and references/tools.md are valid, loadable, and
+  consistent with SKILL.md (no contradicting commands).
