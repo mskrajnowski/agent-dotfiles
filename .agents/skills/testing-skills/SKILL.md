@@ -23,7 +23,7 @@ The `description` is the only routing signal. Verify the skill activates for the
 - Ask the agent to perform the skill's trigger task (e.g. "extract text from this PDF" for a PDF skill) and check whether it loads the skill.
 - Ask a near-miss task (e.g. "convert this PNG" for the same skill) and check it does **not** load the skill.
 - Watch harness startup diagnostics for warnings about the skill.
-- For regression, reuse the scenarios recorded in the skill's `references/SCENARIOS.md` when they exist; else run representative trigger and near-miss prompts.
+- For regression, reuse the scenarios recorded in the skill's `SKILL_TEST.md` when they exist; else run representative trigger and near-miss prompts.
 
 ## 3. End-to-end dry run
 

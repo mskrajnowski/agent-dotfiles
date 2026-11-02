@@ -32,8 +32,8 @@ Load this file when running a full verification pass on a skill. Record pass/fai
 
 ## D. Regression scenarios
 
-- [ ] `references/SCENARIOS.md` exists and covers the skill's main use cases
-- [ ] Scenarios were executed and passed (re-run the scenarios from SCENARIOS.md)
+- [ ] `SKILL_TEST.md` exists and covers the skill's main use cases
+- [ ] Scenarios were executed and passed (re-run the scenarios from SKILL_TEST.md)
 
 ## E. Packaging
 
