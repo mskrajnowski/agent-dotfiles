@@ -2,6 +2,14 @@
 
 These instructions apply to all projects unless overridden by project rules or the developer's explicit request.
 
+## Environment
+
+You are running in a Docker Sandboxes microVM with restricted host access, a filtering
+network proxy, and proxy-injected credentials. For anything about network access,
+authentication failures, installing tools or packages, persistence, host resource access,
+or how this machine is set up, consult the `sandbox` skill first — even if the user does
+not mention the environment.
+
 ## Commits
 
 Always follow the `git-workflow` skill: topic branch first (never commit to the default branch), commit per logical change, then open a PR for the developer to review and merge. See `.agents/skills/git-workflow/SKILL.md` for details.
