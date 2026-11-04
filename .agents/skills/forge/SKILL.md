@@ -37,6 +37,7 @@ New scripts must follow the existing `forge-pr`/`forge-issue` patterns:
 
 | Task | Skill |
 |---|---|
+| List or search repositories visible to the agent | `forge-repo` |
 | Open, list, review diffs, address review feedback, request reviews, update PRs | `forge-pr` |
 | Create, list, comment on, or read issue timelines | `forge-issue` |
 
