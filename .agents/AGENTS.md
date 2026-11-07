@@ -21,6 +21,18 @@ Always follow the `git-workflow` skill: topic branch first (never commit to the 
 - Do not manually edit generated code or lockfiles. Regenerate them and run migrations with project tooling.
 - Structure code for testability, e.g. with dependency injection.
 
+## Python
+
+Do not install packages into the system or user python. If you need to run a script with a
+package that's not available in the system python environment, create a temporary virtualenv
+with `uv venv` and install packages there with `uv pip install`, e.g.:
+
+```sh
+uv venv /tmp/pil-venv
+uv pip install --python /tmp/pil-venv/bin/python pillow
+/tmp/pil-venv/bin/python ...
+```
+
 ## Verification and debugging
 
 - Use the project's documented commands; do not invent them.
