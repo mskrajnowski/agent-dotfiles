@@ -79,3 +79,17 @@ uv pip install --python /tmp/pil-venv/bin/python pillow
 
 - Never commit, print, or expose secrets. Redact logs; avoid real user data in tests and fixtures.
 - Prefer existing dependencies. Justify additions; use the project's package manager; consider license and security implications.
+
+## Vision and images
+
+Delegate image and video analysis to the `vision` subagent so it runs on the configured
+vision model regardless of the main model's capabilities.
+
+- Use it to read, describe, transcribe, or inspect an image, photo, screenshot, diagram,
+  or video. Pass the absolute path to the media in the task; the subagent reads the file
+  itself. It extracts video frames with ffmpeg and analyzes them as images. If the path is
+  unknown, ask the user for it.
+- For follow-up questions about the same media, continue the same subagent session rather
+  than starting a new one: in pi, resume the run id returned by the launch with
+  `subagent({ action: "resume", id, message })`; in Claude Code, ask to continue the
+  subagent.
