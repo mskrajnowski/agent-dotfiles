@@ -14,6 +14,7 @@ mkdir -p \
   ~/.config/mise \
   ~/.local/bin \
   ~/.pi/agent/agents \
+  ~/.claude/agents \
   ~/.claude/skills
 
 stow --dir "$dotfiles_dir" --target ~ --adopt .
