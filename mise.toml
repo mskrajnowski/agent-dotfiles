@@ -1,0 +1,8 @@
+# Repo-local setup for working on the dotfiles (applies when mise is active).
+# Pi rewrites changelog-tracking state in .pi/agent/settings.json on every
+# update; the clean filter strips it so the tracked file stays stable
+# (see bin/pi-settings-filter and badlogic/pi-mono#720).
+[env]
+GIT_CONFIG_COUNT = "1"
+GIT_CONFIG_KEY_0 = "filter.pi-settings.clean"
+GIT_CONFIG_VALUE_0 = "bin/pi-settings-filter clean"

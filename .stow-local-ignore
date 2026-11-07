@@ -1,5 +1,8 @@
 ^/install\.sh
 ^/AGENTS.md
+^/\.gitattributes
+^/mise\.toml
+^/bin
 ^/\.pi/npm
 
 # Stow defaults:

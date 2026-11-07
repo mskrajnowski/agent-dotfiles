@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Git clean filter for .pi/agent/settings.json in the dotfiles repo.
+#
+# Pi rewrites state into settings.json on its own schedule, which would
+# force a dotfiles commit on every pi/package update or churn across
+# machines:
+# - lastChangelogVersion, extensionChangelogVersions: update markers
+#   (badlogic/pi-mono#720)
+# - deviceId, trackingId: random per-machine telemetry UUIDs generated
+#   on first run
+# This filter strips those keys from the tracked file; smudge needs no
+# counterpart because git treats an undefined smudge as identity, and pi
+# recreates the keys as needed.
+#
+# See: https://github.com/badlogic/pi-mono/issues/720
+set -euo pipefail
+
+exec jq 'del(.lastChangelogVersion, .extensionChangelogVersions, .deviceId, .trackingId)'
