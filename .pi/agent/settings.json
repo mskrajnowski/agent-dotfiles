@@ -7,32 +7,10 @@
     "openrouter/z-ai/glm-5.3",
     "openrouter/z-ai/glm-5.3-flash"
   ],
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "high",
   "packages": ["npm:pi-web-access", "npm:pi-subagents"],
   "subagents": {
     "defaultModel": "z-ai/glm-5.3-flash",
-    "defaultThinking": "low",
-    "agentOverrides": {
-      "scout": {
-        "model": "openrouter/z-ai/glm-5.3-flash",
-        "thinking": "low"
-      },
-      "researcher": {
-        "model": "openrouter/z-ai/glm-5.3-flash",
-        "thinking": "low"
-      },
-      "worker": {
-        "model": "openrouter/z-ai/glm-5.3-flash",
-        "thinking": "high"
-      },
-      "reviewer": {
-        "model": "openrouter/z-ai/glm-5.3-flash",
-        "thinking": "high"
-      },
-      "oracle": {
-        "model": "openrouter/z-ai/glm-5.3",
-        "thinking": "high"
-      }
-    }
+    "disableBuiltins": true
   }
 }
