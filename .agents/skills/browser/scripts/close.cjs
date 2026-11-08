@@ -5,7 +5,11 @@ const { connect } = require('./attach.cjs');
 
 (async () => {
   const kind = process.argv[2];
-  const browser = await connect(kind);
+  // recover:false — this script runs inside stop.sh; letting connect()
+  // restart the browser from here would recurse (stop -> close -> restart
+  // -> stop). If the session is leaked the graceful close fails and
+  // stop.sh falls back to signals, as designed.
+  const browser = await connect(kind, { recover: false });
   if (kind === 'chromium') {
     // browser.close() on a CDP connection only disconnects; ask the browser
     // itself to shut down so it flushes state.
