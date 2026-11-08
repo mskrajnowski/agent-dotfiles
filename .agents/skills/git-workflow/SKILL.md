@@ -41,7 +41,8 @@ Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): su
 
 - Brief and specific. `fix(auth): use refresh token before expiry`, not `update code`.
 - Subject style: imperative mood ("add footer", not "added footer"), no trailing period, subject line roughly ≤ 72 characters.
-- Body only when it adds real context (why, not what); no essays.
+- **Default to title-only commits.** Do not write a commit body unless it is genuinely needed. The diff already says what changed; narrating it (implementation details, lists of changed files, what was replaced by what, test runs) duplicates the diff and is unwanted.
+- Add a body only when a reader cannot understand the change from the title and diff alone — for example a non-obvious rationale, an external constraint, or a benchmark/standard reference that the diff cannot convey. One or two lines at most. If you are describing *how* it was implemented, that belongs in the diff or the PR description, not the body.
 - Scope is optional; use it when it disambiguates.
 - Reference issues in the PR description, not in commit footers — easier to edit, and the forge links them at the PR level. Exception: a `revert` commit may reference the reverted SHAs in its footer, per the spec.
 - Breaking changes follow the spec: `!` after type/scope (`feat(api)!:`) or a `BREAKING CHANGE:` footer.
@@ -63,7 +64,7 @@ Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): su
 
 - Once a PR is open, do not rewrite its pushed history. Review comments map to specific commits; rewriting breaks that traceability.
 - Exception: when stuck, share your state with a `wip: ...` commit and push it. Once you and the developer have figured things out, amend or fixup those commits away — a `wip:` commit is scaffolding, not history.
-- Cleaning up a messy history is welcome right before the developer merges. If the history is messy at review time, suggest a cleanup pass (squash fixup commits, interactive rebase) as part of the handoff.
+- Cleaning up a messy history is welcome right before the developer merges. If the history is messy at review time, suggest a cleanup pass (squash fixup commits, interactive rebase) as part of the handoff. When the developer asks for it ("prepare the PR for merging"), perform the cleanup per section 9 rather than just suggesting it.
 
 ## 7. Staying in sync with the target branch
 
@@ -74,7 +75,19 @@ Use [Conventional Commits](references/CONVENTIONAL-COMMITS.md): `type(scope): su
 
 - When work builds on another open PR, branch from that PR's branch and open your PR against it instead of the default branch. Note the dependency in the PR description.
 
-## 9. Safety
+## 9. Pre-merge cleanup ("prepare the PR for merging")
+
+When the developer asks to prepare a PR for merging (pre-merge cleanup, a fast-forwardable state), rework the branch history before handoff:
+
+- Fetch the target branch and rebase onto its current tip first, so the cleanup lands on up-to-date history. Prefer linear history; file-disjoint rebases are conflict-free.
+- Squash the branch into one commit per logical change — by default a single commit: `git reset --soft <merge-base>` and re-commit the final tree state. Intermediate fixups, doc-of-doc refinements, and rule-tweak iterations fold away into the final content.
+- Commit messages follow section 4: title-only unless title and diff cannot convey the change.
+- Push with `--force-with-lease`.
+- Verify and report: `git log <target>..HEAD` shows only the clean commit(s), the diff contains no unrelated files, the working tree is clean.
+- Add a single PR comment stating the commit history was cleaned up and the PR is ready to merge (fast-forward). Do not update or audit older comments that reference pre-cleanup SHAs — by cleanup time the PR is content-final and comments should have been resolved; if unresolved review comments remain, flag them before squashing instead of folding them in silently.
+- If several PRs share a merge base, only the first merge is a fast-forward; state the merge order and the one-line rebase needed between merges.
+
+## 10. Safety
 
 - Ask before irreversible actions: rewriting pushed history, force pushes (outside the `--force-with-lease` review loop), changing credentials, deleting data.
 - Never commit secrets. Redact logs and keep real user data out of tests and fixtures.
