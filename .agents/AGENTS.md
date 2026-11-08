@@ -82,13 +82,17 @@ uv pip install --python /tmp/pil-venv/bin/python pillow
 
 ## Vision and images
 
-Delegate image and video analysis to the `vision` subagent so it runs on the configured
-vision model regardless of the main model's capabilities.
+The `vision` subagent answers questions about images on a dedicated vision model,
+zero-shot: one read pass, no thinking, and no tools beyond loading the files into its
+context. Reading images yourself is fine when your model supports them and a quick look
+answers the question; delegate when you need reliable detail (exact transcription, small
+text, dense screenshots), a second opinion, or when your model cannot read images.
 
-- Use it to read, describe, transcribe, or inspect an image, photo, screenshot, diagram,
-  or video. Pass the absolute path to the media in the task; the subagent reads the file
-  itself. It extracts video frames with ffmpeg and analyzes them as images. If the path is
-  unknown, ask the user for it.
+- Pass the absolute path (or paths) and the question in the task. The subagent reads the
+  files itself and does no preprocessing. If the path is unknown, ask the user for it.
+- For video, extract frames yourself first (e.g.
+  `ffmpeg -i input.mp4 -vf fps=1 /tmp/frames/f%04d.png`) and pass them as images with
+  their timestamps; the vision subagent has no shell access.
 - For follow-up questions about the same media, continue the same subagent session rather
   than starting a new one: in pi, resume the run id returned by the launch with
   `subagent({ action: "resume", id, message })`; in Claude Code, ask to continue the

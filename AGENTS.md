@@ -60,8 +60,10 @@ other harness in the same change.
   default.
 - `delegate` is the exception: it follows the parent session's model (`model: inherit` in
   Pi, no `model` field in Claude) instead of a tier.
-- `vision` is the other exception: it stays on `openrouter/deepseek/deepseek-v4.1-flash`
-  (Pi, `thinking: high`) / `haiku` (Claude) rather than the fast/cheap tier, because
-  deepseek does a better job with image understanding than glm-5.3-flash.
+- `vision` is the other exception: it stays on `openrouter/z-ai/glm-5.3-flash`
+  (Pi, `thinking: off`) / `haiku` (Claude) rather than the fast/cheap tier. Chosen
+  empirically: glm-5.3-flash reads screenshots at full resolution (no provider-side
+  downscale), while deepseek's effective image input is downscaled to roughly 400px,
+  which loses small text; thinking level made no accuracy difference.
 - The `vision` subagent instructions are inlined in both agent files rather than in a
   shared skill, so the child skips an extra skill-read roundtrip.
