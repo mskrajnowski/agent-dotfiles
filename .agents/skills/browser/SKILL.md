@@ -26,6 +26,12 @@ removed there).
 
 ## Quickstart
 
+Prefer **chromium** as the primary browser: it gets the full Puppeteer API
+over CDP (reliable `newPage()`, raw CDP sessions, richer window control) and
+avoids the Firefox BiDi quirks listed below. Use **firefox** for
+compatibility checks — when a second engine opinion is useful, or when the
+task is explicitly about Firefox-specific behavior.
+
 ```sh
 scripts/start.sh chromium                       # background browser (headed)
 scripts/exec.sh examples/attach.cjs chromium https://example.com
