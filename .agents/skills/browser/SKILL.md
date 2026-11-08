@@ -42,28 +42,91 @@ Scripts are CommonJS (`script.cjs`) run by `scripts/exec.sh`, which keeps a
 project-local npm environment in `/tmp/browser-skill` (puppeteer-core
 installed on first use; add more dependencies with plain npm in that
 directory) and exports `BROWSER_SKILL_DIR` so scripts can load the shared
-attach helper:
+attach helper. The preferred entry point is `withBrowser`, which runs a
+callback and always releases the connection in a `finally` (on Firefox the
+WebDriver BiDi session would otherwise outlive an errored run and block the
+next attach — see "Firefox quirks" below):
 
 ```js
-const { attach } = require(`${process.env.BROWSER_SKILL_DIR}/scripts/attach.cjs`);
+const { withBrowser } = require(`${process.env.BROWSER_SKILL_DIR}/scripts/attach.cjs`);
 
-const { page, detach } = await attach('chromium'); // or 'firefox'
-await page.goto('https://example.com', { waitUntil: 'domcontentloaded' });
-console.log(await page.title());
+(async () => {
+  await withBrowser('chromium', async ({ page, openTab }) => { // or 'firefox'
+    await page.goto('https://example.com', { waitUntil: 'domcontentloaded' });
+    console.log(await page.title());
 
-// state check before pixels — text first, vision second:
-console.log(await page.evaluate(() => document.body.innerText));
+    // state check before pixels — text first, vision second:
+    console.log(await page.evaluate(() => document.body.innerText));
 
-await page.screenshot({ path: '/tmp/page.png' });
-await detach(); // closes the connection only; the browser keeps running
+    // open a URL in a new tab (works on both engines; see Firefox quirks):
+    const tab = await openTab('https://example.com/other');
+    await tab.screenshot({ path: '/tmp/page.png' });
+  });
+})().catch((e) => { console.error(e); process.exit(1); });
 ```
 
-End scripts with `detach()` — `browser.close()` would shut the browser
-down on Firefox (and only disconnects on Chromium); `detach()` always does
-the right thing. Puppeteer's auto-waiting locators (`page.locator('h1')`)
-and ARIA selectors (`page.$('aria/Button Name')`) work on both engines;
-a few niche features are unsupported over BiDi and throw
-`UnsupportedOperation` on Firefox.
+The callback receives `{ kind, browser, page, openTab }`. `page` is a reused
+tab, so consecutive scripts operate on the same session; cookies, logins and
+open tabs persist until the browser is stopped. For scripts that need raw
+access, low-level pieces are exported too: `attach(kind)` (returns
+`{ kind, browser, page, detach }`), `connect(kind)`, `openTab(...)`, and
+`stateFor(kind)`.
+
+## Firefox quirks (WebDriver BiDi)
+
+Firefox's remote agent has known single-session limitations. The skill
+works around them; keep them in mind when writing scripts:
+
+- **One BiDi session per instance, and it survives an abrupt disconnect.**
+  A clean `detach()`/disconnect releases it, but a killed run (timeout,
+  Ctrl-C, SIGKILL) leaves the session behind, and the next attach then
+  fails with "Maximum number of active sessions". `connect()` detects that
+  and transparently restarts the browser once (open tabs are lost).
+  Upstream: [bug 1739363](https://bugzilla.mozilla.org/show_bug.cgi?id=1739363),
+  [bug 1862018](https://bugzilla.mozilla.org/show_bug.cgi?id=1862018).
+- **Never call `browser.newPage()` on Firefox** — it can hang forever
+  (BiDi `browsingContext.create` waits for tab visibility). Use the
+  `openTab(url)` helper: it uses `window.open()` from an existing page and
+  finds the new tab by URL. Same family:
+  [bug 1935104](https://bugzilla.mozilla.org/show_bug.cgi?id=1935104).
+- **Don't match pages by `page.target()._targetId`** — that field is
+  CDP-only and is `undefined` over BiDi. Match by URL instead (openTab
+  does this for you).
+- `browser.close()` shuts the browser down on Firefox (and only
+  disconnects on Chromium); `withBrowser`/`detach()` always do the right
+  thing.
+
+## UI quirks
+
+Visible browser chrome to expect — and to ignore when inspecting
+screenshots:
+
+- **Chromium: no automation infobar.** Chrome for Testing otherwise shows
+  a permanent "Chrome for Testing v… is only for automated testing…"
+  infobar below the address bar; `start.sh` launches it with
+  `--disable-infobars`, a Chrome for Testing-only switch reintroduced for
+  exactly this purpose
+  ([chromium commit 5047fdc](https://github.com/chromium/chromium/commit/5047fdcf545bb979c1955c765dd361230c5fd728);
+  branded Chrome removed the flag in 2019 and cannot use it).
+- **Firefox: striped address bar + robot icon = remote control, not an
+  error.** While the remote agent is listening (i.e. whenever a background
+  Firefox is running), the URL bar gets an orange/red striped background
+  and a robot icon appears; hovering it reads "Browser is under remote
+  control by RemoteAgent". This is a deliberate, by-design indicator
+  ([bug 1355890](https://bugzilla.mozilla.org/show_bug.cgi?id=1355890),
+  [bug 1526364](https://bugzilla.mozilla.org/show_bug.cgi?id=1526364)) —
+  don't confuse it with a broken profile.
+- **Firefox popups.** Blocked popups or the tracking-protection shield
+  panel can appear as small overlays after navigation/reload; dismiss with
+  `page.keyboard.press('Escape')`.
+- **WebGL is software-rendered in both engines** (no GPU in the sandbox):
+  Chromium via SwiftShader (`--enable-unsafe-swiftshader`, passed by
+  `start.sh` — required since Chrome 137 disabled the software fallback by
+  default), Firefox via Mesa llvmpipe. OpenGL/WebGL sites work, but
+  expect software-rendering performance and don't be surprised that
+  `page.screenshot()` of a WebGL canvas can come out blank (compositor
+  frame without `preserveDrawingBuffer`) — screenshot the desktop with
+  `grim` instead to verify what the window actually shows.
 
 Puppeteer documentation:
 
