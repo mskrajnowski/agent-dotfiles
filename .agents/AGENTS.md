@@ -88,6 +88,12 @@ context. Reading images yourself is fine when your model supports them and a qui
 answers the question; delegate when you need reliable detail (exact transcription, small
 text, dense screenshots), a second opinion, or when your model cannot read images.
 
+- Ask `vision` for measurements — bounding boxes tight to the content, as image-relative
+  percentages (x_min, y_min, x_max, y_max), plus dimensions, positions, and counts —
+  instead of detecting shapes with numpy/OpenCV/PIL scripts; hand-drawn, anti-aliased, or
+  overlapping content defeats scripted heuristics. Scripts are for the pixel work vision
+  cannot do (crop, resize, convert), driven by vision-supplied coordinates. Default loop
+  for image manipulation: vision measures → script transforms → vision verifies.
 - Pass the absolute path (or paths) and the question in the task. The subagent reads the
   files itself and does no preprocessing. If the path is unknown, ask the user for it.
 - For video, extract frames yourself first (e.g.
