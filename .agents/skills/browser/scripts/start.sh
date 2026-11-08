@@ -105,9 +105,13 @@ fi
 launch_args=()
 case $browser in
 chromium)
+  # --disable-infobars is a Chrome for Testing-only switch (branded Chrome
+  # removed it in 2019) that hides the "only for automated testing" bar.
   launch_args=(--remote-debugging-port="$port"
     --user-data-dir="$DATA_DIR/profiles/$browser"
-    --no-first-run --no-default-browser-check)
+    --no-first-run --no-default-browser-check
+    --disable-infobars
+    --enable-unsafe-swiftshader)
   [[ $headless == true ]] && launch_args+=(--headless)
   ;;
 firefox)
